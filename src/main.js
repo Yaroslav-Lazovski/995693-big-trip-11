@@ -6,7 +6,7 @@ import {createTripSortTemplate} from "./components/trip-sort.js";
 import {createFormEventsTemplate} from "./components/form-events.js";
 import {createDayListTemplate} from "./components/day-list.js";
 import {createDayInfoTemplate} from "./components/day-info.js";
-import {createEventsList} from "./components/events-list.js";
+import {createEventsListTemplate} from "./components/events-list.js";
 import {createEventTemplate} from "./components/event.js";
 import {generateEvents} from "./mock/events.js";
 
@@ -42,7 +42,7 @@ render(dayList, createDayInfoTemplate(), `beforeend`);
 
 const dayOfEvent = dayList.querySelector(`.trip-days__item`);
 
-render(dayOfEvent, createEventsList(), `beforeend`);
+render(dayOfEvent, createEventsListTemplate(), `beforeend`);
 
 const eventsList = eventsElement.querySelector(`.trip-events__list`);
 

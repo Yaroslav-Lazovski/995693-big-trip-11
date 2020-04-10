@@ -12,19 +12,19 @@ const generateOfferList = (offer) => {
     }).slice(0, 3).join(`\n`);
 };
 
-export const createEventTemplate = (trip) => {
-  const {event, city, price, offer} = trip;
+export const createEventTemplate = (event) => {
+  const {type, city, price, offer} = event;
 
-  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === event) ? `in` : `to`;
+  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === type) ? `in` : `to`;
   const isArrive = !!offer;
 
   return (
     `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${event}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${event} ${isMove} ${city}</h3>
+        <h3 class="event__title">${type} ${isMove} ${city}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>

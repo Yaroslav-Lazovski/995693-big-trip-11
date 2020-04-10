@@ -38,7 +38,7 @@ const destinationDescription = `
 
 const stringsArr = destinationDescription.split(`.`);
 
-const generateRandomStrings = (arr, size) => {
+const generateRandomArray = (arr, size) => {
   let copy = arr.slice(0);
   let randomStrings = [];
   for (let i = 0; i < size && i < copy.length; i++) {
@@ -56,11 +56,11 @@ const photos = [`http://picsum.photos/248/152?r=${Math.random()}`];
 
 const generateEvent = () => {
   return {
-    event: typesOfEvent[Math.floor(Math.random() * typesOfEvent.length)],
+    type: typesOfEvent[Math.floor(Math.random() * typesOfEvent.length)],
     city: cities[Math.floor(Math.random() * cities.length)],
     price: Math.floor(Math.random() * 100),
-    offer: Math.random() > 0.5 ? offers.slice(1, Math.floor(Math.random() * offers.length)) : null,
-    description: generateRandomStrings(stringsArr, randSize()),
+    offer: generateRandomArray(offers, (randSize() - 1)),
+    description: generateRandomArray(stringsArr, randSize()),
     photo: photos,
   };
 };
