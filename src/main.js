@@ -6,8 +6,6 @@ import {createTripSortTemplate} from "./components/trip-sort.js";
 import {createFormEventsTemplate} from "./components/form-events.js";
 import {createDayListTemplate} from "./components/day-list.js";
 import {createDayInfoTemplate} from "./components/day-info.js";
-import {createEventsListTemplate} from "./components/events-list.js";
-import {createEventTemplate} from "./components/event.js";
 import {generateEvents} from "./mock/events.js";
 import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
 
@@ -18,6 +16,8 @@ const render = (container, template, place) => {
 const EVENT_COUNT = 20;
 
 const events = generateEvents(EVENT_COUNT);
+const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))];
+
 const filters = generateFilters();
 const tabs = generateTabs();
 
@@ -41,13 +41,8 @@ render(eventsElement, createDayListTemplate(), `beforeend`);
 
 const dayList = eventsElement.querySelector(`.trip-days`);
 
-render(dayList, createDayInfoTemplate(), `beforeend`);
-
-const dayOfEvent = dayList.querySelector(`.trip-days__item`);
-
-render(dayOfEvent, createEventsListTemplate(), `beforeend`);
-
-const eventsList = eventsElement.querySelector(`.trip-events__list`);
-
-events.slice(1, EVENT_COUNT)
-  .forEach((event) => render(eventsList, createEventTemplate(event), `beforeend`));
+dates.forEach((item) => {
+  render(dayList, createDayInfoTemplate(item, events.filter((event) => {
+    return item === new Date(event.startDate).toDateString();
+  })), `beforeend`);
+});

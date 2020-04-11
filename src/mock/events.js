@@ -38,19 +38,16 @@ const destinationDescription = `
 
 const stringsArr = destinationDescription.split(`.`);
 
-const generateRandomArray = (arr, size) => {
-  let copy = arr.slice(0);
-  let randomStrings = [];
-  for (let i = 0; i < size && i < copy.length; i++) {
-    let index = Math.floor(Math.random() * copy.length);
-    randomStrings.push(copy.splice(index, 1)[0]);
+const shuffleArr = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
   }
-  return randomStrings;
+  return array;
 };
 
-const randSize = () => {
-  return Math.floor(1 + Math.random() * 5);
-};
 
 const photos = [`http://picsum.photos/248/152?r=${Math.random()}`];
 
@@ -59,9 +56,11 @@ const generateEvent = () => {
     type: typesOfEvent[Math.floor(Math.random() * typesOfEvent.length)],
     city: cities[Math.floor(Math.random() * cities.length)],
     price: Math.floor(Math.random() * 100),
-    offer: generateRandomArray(offers, (randSize() - 1)),
-    description: generateRandomArray(stringsArr, randSize()),
+    offer: shuffleArr(offers.slice(0, Math.floor(Math.random() * offers.length + 1))),
+    description: shuffleArr(stringsArr.slice(0, Math.floor(Math.random() * 5 + 1))),
     photo: photos,
+    startDate: new Date().getTime() + Math.floor(Math.random() * 300000000)
+    // endDate: //duration
   };
 };
 
