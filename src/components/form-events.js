@@ -3,7 +3,7 @@ const createTypeOfEventMarkup = (type) => {
     `<div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
         <span class="visually-hidden">Choose event type</span>
-        <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+        <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
       </label>
       <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -88,13 +88,13 @@ const createOffersMarkup = (offers) => {
     }).join(`\n`);
 };
 
-const createDescriptionTemplate = (text) => {
+const createDescriptionMarkup = (text) => {
   return (
     `<p class="event__destination-description">${text.join(`.`)}</p>`
   );
 };
 
-const createPhotosTemplate = (url) => {
+const createPhotosMarkup = (url) => {
   return (
     `<div class="event__photos-tape">
       <img class="event__photo" src="${url}" alt="Event photo">
@@ -109,8 +109,8 @@ export const createFormEventsTemplate = (event) => {
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === type) ? `in` : `to`;
   const offersMarkup = createOffersMarkup(offer);
-  const descriptionOfEvent = createDescriptionTemplate(description);
-  const photos = createPhotosTemplate(photo);
+  const descriptionOfEvent = createDescriptionMarkup(description);
+  const photos = createPhotosMarkup(photo);
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
