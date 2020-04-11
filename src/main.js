@@ -9,6 +9,7 @@ import {createDayInfoTemplate} from "./components/day-info.js";
 import {createEventsListTemplate} from "./components/events-list.js";
 import {createEventTemplate} from "./components/event.js";
 import {generateEvents} from "./mock/events.js";
+import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -17,6 +18,8 @@ const render = (container, template, place) => {
 const EVENT_COUNT = 20;
 
 const events = generateEvents(EVENT_COUNT);
+const filters = generateFilters();
+const tabs = generateTabs();
 
 
 const infoElement = document.querySelector(`.trip-main`);
@@ -26,8 +29,8 @@ const eventsHeader = eventsElement.querySelector(`h2`);
 
 
 render(infoElement, createTripInfoTemplate(), `afterbegin`);
-render(controlsElement[0], createTripTabsTemplate(), `afterend`);
-render(controlsElement[1], createTripFiltersTemplate(), `afterend`);
+render(controlsElement[0], createTripTabsTemplate(tabs), `afterend`);
+render(controlsElement[1], createTripFiltersTemplate(filters), `afterend`);
 render(eventsHeader, createTripSortTemplate(), `afterend`);
 render(eventsElement, createFormEventsTemplate(events[0]), `beforeend`);
 
