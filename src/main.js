@@ -20,6 +20,15 @@ const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateSt
   return new Date(a).getDate() - new Date(b).getDate();
 });
 
+const tripInfoData = {
+  startDate: new Date(dates[0]).getDate(),
+  endDate: new Date(dates[dates.length - 1]).getDate(),
+  startCity: events[0].city,
+  middleCity: events[events.length / 2 - 1].city,
+  endCity: events[events.length - 1].city,
+  month: new Date(dates[0]).toLocaleString(`default`, {month: `long`})
+};
+
 
 const filters = generateFilters();
 const tabs = generateTabs();
@@ -31,7 +40,7 @@ const eventsElement = document.querySelector(`.trip-events`);
 const eventsHeader = eventsElement.querySelector(`h2`);
 
 
-render(infoElement, createTripInfoTemplate(), `afterbegin`);
+render(infoElement, createTripInfoTemplate(tripInfoData), `afterbegin`);
 render(controlsElement[0], createTripTabsTemplate(tabs), `afterend`);
 render(controlsElement[1], createTripFiltersTemplate(filters), `afterend`);
 render(eventsHeader, createTripSortTemplate(), `afterend`);
