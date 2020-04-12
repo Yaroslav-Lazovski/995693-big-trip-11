@@ -51,7 +51,18 @@ const shuffleArr = (array) => {
 
 const photos = [`http://picsum.photos/248/152?r=${Math.random()}`];
 
+const getRandomDate = () => {
+  const randomDate = new Date().getTime();
+  const ramdomInt = Math.floor(Math.random() * 300000000);
+
+  return Math.random() > 0.5 ? randomDate + ramdomInt : randomDate - ramdomInt;
+};
+
+
 const generateEvent = () => {
+  const startDate = getRandomDate();
+  const endDate = getRandomDate();
+
   return {
     type: typesOfEvent[Math.floor(Math.random() * typesOfEvent.length)],
     city: cities[Math.floor(Math.random() * cities.length)],
@@ -59,8 +70,8 @@ const generateEvent = () => {
     offer: shuffleArr(offers.slice(0, Math.floor(Math.random() * offers.length + 1))),
     description: shuffleArr(stringsArr.slice(0, Math.floor(Math.random() * 5 + 1))),
     photo: photos,
-    startDate: new Date().getTime() + Math.floor(Math.random() * 300000000)
-    // endDate: //duration
+    startDate: Math.min(startDate, endDate),
+    endDate: Math.max(startDate, endDate),
   };
 };
 

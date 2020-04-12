@@ -29,6 +29,25 @@ const tripInfoData = {
   month: new Date(dates[0]).toLocaleString(`default`, {month: `long`})
 };
 
+const countTripPrice = () => {
+  const tripPrices = [];
+  const offerPrices = [];
+
+  events.forEach((item) => {
+    tripPrices.push(item.price);
+  });
+
+  events.forEach((item) => {
+    item.offer.forEach((element) => {
+      offerPrices.push(+element.cost);
+    });
+  });
+
+  return [...tripPrices, ...offerPrices].reduce((sum, current) => {
+    return sum + current;
+  }, 0);
+};
+
 
 const filters = generateFilters();
 const tabs = generateTabs();
@@ -48,7 +67,7 @@ render(eventsElement, createFormEventsTemplate(events[0]), `beforeend`);
 
 const tripInfo = document.querySelector(`.trip-info`);
 
-render(tripInfo, createTripCostTemplate(), `beforeend`);
+render(tripInfo, createTripCostTemplate(countTripPrice()), `beforeend`);
 render(eventsElement, createDayListTemplate(), `beforeend`);
 
 const dayList = eventsElement.querySelector(`.trip-days`);
