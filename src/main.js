@@ -16,7 +16,10 @@ const render = (container, template, place) => {
 const EVENT_COUNT = 20;
 
 const events = generateEvents(EVENT_COUNT);
-const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))];
+const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))].sort((a, b) => {
+  return new Date(a).getDate() - new Date(b).getDate();
+});
+
 
 const filters = generateFilters();
 const tabs = generateTabs();
@@ -41,8 +44,9 @@ render(eventsElement, createDayListTemplate(), `beforeend`);
 
 const dayList = eventsElement.querySelector(`.trip-days`);
 
-dates.forEach((item) => {
-  render(dayList, createDayInfoTemplate(item, events.filter((event) => {
+
+dates.forEach((item, index) => {
+  render(dayList, createDayInfoTemplate(index, item, events.filter((event) => {
     return item === new Date(event.startDate).toDateString();
   })), `beforeend`);
 });
