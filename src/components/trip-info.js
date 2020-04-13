@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 export const createTripInfoTemplate = (tripInfo) => {
   const {startDate, endDate, startCity, middleCity, endCity, month} = tripInfo;
   return (
@@ -9,3 +11,25 @@ export const createTripInfoTemplate = (tripInfo) => {
     </section>`
   );
 };
+
+export class TripInfo {
+  constructor(tripInfo) {
+    this._tripInfo = tripInfo;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripInfoTemplate(this._tripInfo);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

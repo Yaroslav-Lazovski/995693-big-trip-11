@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createTypeOfEventMarkup = (type) => {
   return (
     `<div class="event__type-wrapper">
@@ -103,7 +105,7 @@ const createPhotosMarkup = (url) => {
 };
 
 
-export const createFormEventsTemplate = (event) => {
+const createFormEventsTemplate = (event) => {
   const {type, city, price, offer, description, photo} = event;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
@@ -174,3 +176,25 @@ export const createFormEventsTemplate = (event) => {
     </form>`
   );
 };
+
+export class FormEvent {
+  constructor(event) {
+    this._event = event;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFormEventsTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

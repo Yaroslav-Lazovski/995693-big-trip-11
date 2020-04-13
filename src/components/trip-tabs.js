@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createTabMarkup = (tab, isActive) => {
   const {name} = tab;
 
@@ -15,3 +17,25 @@ export const createTripTabsTemplate = (tabs) => {
     </nav>`
   );
 };
+
+export class TripTabs {
+  constructor(tabs) {
+    this._tabs = tabs;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripTabsTemplate(this._tabs);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
