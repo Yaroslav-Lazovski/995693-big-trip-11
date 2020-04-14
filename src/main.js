@@ -12,8 +12,6 @@ import {generateEvents} from "./mock/events.js";
 import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
 import {render, RenderPosition} from "./utils";
 
-console.log(TripInfoComponent);
-
 
 const EVENT_COUNT = 20;
 
@@ -38,7 +36,17 @@ const renderEvent = (eventListElement, event) => {
   render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-const renderTripEvents = () => {};
+const renderTripEvents = (tripEventsComponent, events) => {
+  render(tripEventsComponent.getElement(), new TripSortComponent().getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsComponent.getElement(), new TripEventsComponent().getElement(), RenderPosition.BEFOREEND);
+
+  const eventListElement = tripEventsComponent.getElement().querySelector(`.trip-events`);
+
+  events.slice(0, EVENT_COUNT)
+    .forEach((event) => {
+      renderEvent(eventListElement, event);
+    });
+};
 
 const events = generateEvents(EVENT_COUNT);
 const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))].sort((a, b) => {
