@@ -17,7 +17,7 @@ const createFilterMarkup = (filter, isChecked) => {
   );
 };
 
-export const createTripFiltersTemplate = (filters) => {
+const createTripFiltersTemplate = (filters) => {
   const filtersMarkup = filters.map((it, i) => createFilterMarkup(it, i === 0)).join(`\n`);
 
   return (
@@ -29,7 +29,7 @@ export const createTripFiltersTemplate = (filters) => {
   );
 };
 
-export class TripFilters {
+export default class TripFilters {
   constructor(filters) {
     this._filters = filters;
 

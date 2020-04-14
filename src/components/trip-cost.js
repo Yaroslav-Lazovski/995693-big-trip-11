@@ -1,6 +1,6 @@
 import {createElement} from "../utils.js";
 
-export const createTripCostTemplate = (cost) => {
+const createTripCostTemplate = (cost) => {
   return (
     `
     <p class="trip-info__cost">
@@ -10,7 +10,7 @@ export const createTripCostTemplate = (cost) => {
   );
 };
 
-export class TripCost {
+export default class TripCost {
   constructor(cost) {
     this._cost = cost;
 

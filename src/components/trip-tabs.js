@@ -8,7 +8,7 @@ const createTabMarkup = (tab, isActive) => {
   );
 };
 
-export const createTripTabsTemplate = (tabs) => {
+const createTripTabsTemplate = (tabs) => {
   const tabsMarkup = tabs.map((it, i) => createTabMarkup(it, i === 0)).join(`\n`);
 
   return (
@@ -18,7 +18,7 @@ export const createTripTabsTemplate = (tabs) => {
   );
 };
 
-export class TripTabs {
+export default class TripTabs {
   constructor(tabs) {
     this._tabs = tabs;
 

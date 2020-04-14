@@ -1,6 +1,6 @@
 import {createElement} from "../utils.js";
 
-export const createTripInfoTemplate = (tripInfo) => {
+const createTripInfoTemplate = (tripInfo) => {
   const {startDate, endDate, startCity, middleCity, endCity, month} = tripInfo;
   return (
     `<section class="trip-main__trip-info  trip-info">
@@ -12,7 +12,7 @@ export const createTripInfoTemplate = (tripInfo) => {
   );
 };
 
-export class TripInfo {
+export default class TripInfo {
   constructor(tripInfo) {
     this._tripInfo = tripInfo;
 
