@@ -2,7 +2,7 @@ import TripInfoComponent from "./components/trip-info.js";
 import TripCostComponent from "./components/trip-cost.js";
 import TripTabsComponent from "./components/trip-tabs.js";
 import TripFiltersComponent from "./components/trip-filters.js";
-import TripEventsComponent from "./components/trip-events.js";
+// import TripEventsComponent from "./components/trip-events.js";
 import TripSortComponent from "./components/trip-sort.js";
 import FormEventsComponent from "./components/form-events.js";
 import EventComponent from "./components/event.js";
@@ -30,23 +30,13 @@ const renderEvent = (eventListElement, event) => {
   rollupButton.addEventListener(`click`, onEditButtonClick);
 
   const formEventsComponent = new FormEventsComponent(event);
-  const editForm = formEventsComponent.getElement().querySelector(`form`);
-  editForm.addEventListener(`submit`, onEditFormSubmit);
+
+  // const editForm = formEventsComponent.getElement().querySelector(`form`);
+  // editForm.addEventListener(`submit`, onEditFormSubmit);
 
   render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-const renderTripEvents = (tripEventsComponent, events) => {
-  render(tripEventsComponent.getElement(), new TripSortComponent().getElement(), RenderPosition.BEFOREEND);
-  render(tripEventsComponent.getElement(), new TripEventsComponent().getElement(), RenderPosition.BEFOREEND);
-
-  const eventListElement = tripEventsComponent.getElement().querySelector(`.trip-events`);
-
-  events.slice(0, EVENT_COUNT)
-    .forEach((event) => {
-      renderEvent(eventListElement, event);
-    });
-};
 
 const events = generateEvents(EVENT_COUNT);
 const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))].sort((a, b) => {
@@ -81,6 +71,8 @@ const countTripPrice = () => {
   }, 0);
 };
 
+const countedTripPrice = countTripPrice();
+
 
 const filters = generateFilters();
 const tabs = generateTabs();
@@ -88,12 +80,32 @@ const tabs = generateTabs();
 
 const infoElement = document.querySelector(`.trip-main`);
 const controlsElement = document.querySelector(`.trip-controls`).querySelectorAll(`h2`);
-
+const tripEventsElement = document.querySelector(`.trip-events`);
 
 
 render(infoElement, new TripInfoComponent(tripInfoData).getElement(), RenderPosition.AFTERBEGIN);
 render(controlsElement[0], new TripTabsComponent(tabs).getElement(), RenderPosition.AFTEREND);
 render(controlsElement[1], new TripFiltersComponent(filters).getElement(), RenderPosition.AFTEREND);
+render(tripEventsElement, new TripSortComponent().getElement(), RenderPosition.BEFOREEND);
+render(tripEventsElement, new FormEventsComponent(events[0]).getElement(), RenderPosition.BEFOREEND);
+
+const tripInfo = document.querySelector(`.trip-info`);
+
+render(tripInfo, new TripCostComponent(countedTripPrice).getElement(), RenderPosition.BEFOREEND);
+render(tripEventsElement, new DayListComponent().getElement(), RenderPosition.BEFOREEND);
+
+const dayList = tripEventsElement.querySelector(`.trip-days`);
+
+// dates.forEach((item, index) => {
+//   render(dayList, new DayInfoComponent(index, item, events.filter((event) => {
+//     return item === new Date(event.startDate).toDateString();
+//   })), RenderPosition.BEFOREEND);
+// });
+
+events.slice(0, EVENT_COUNT)
+  .forEach((event) => {
+    renderEvent(dayList, event);
+  });
 
 /* ============================================== */
 

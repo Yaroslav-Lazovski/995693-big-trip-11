@@ -28,7 +28,7 @@ const createDayInfoTemplate = (index, day, events) => {
   );
 };
 
-export default class FormEvent {
+export default class DayInfo {
   constructor(index, day, events) {
     this._index = index;
     this._day = day;
@@ -45,6 +45,7 @@ export default class FormEvent {
     if (!this._element) {
       this._element = createDayInfoTemplate(this.getTemplate());
     }
+    return this._element;
   }
 
   removeElement() {
