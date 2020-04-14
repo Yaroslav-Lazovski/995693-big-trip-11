@@ -8,10 +8,8 @@ import {createDayListTemplate} from "./components/day-list.js";
 import {createDayInfoTemplate} from "./components/day-info.js";
 import {generateEvents} from "./mock/events.js";
 import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
+import {render, RenderPosition} from "./utils";
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const EVENT_COUNT = 20;
 
