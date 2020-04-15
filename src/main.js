@@ -79,22 +79,36 @@ dates.forEach((item, index) => {
   }).forEach((element) => {
     const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
 
-    const onEditButtonClick = () => {
+    const replaceEventToEdit = () => {
       eventListElement.replaceChild(editEventComponent.getElement(), eventComponent.getElement());
     };
 
-    const onEditFormSubmit = (evt) => {
-      evt.preventDefault();
+    const replaceEditToEvent = () => {
       eventListElement.replaceChild(eventComponent.getElement(), editEventComponent.getElement());
+    };
+
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+      if (isEscKey) {
+        replaceEditToEvent();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
     };
 
     const eventComponent = new EventComponent(element);
     const rollupButton = eventComponent.getElement().querySelector(`.event__rollup-btn`);
-    rollupButton.addEventListener(`click`, onEditButtonClick);
+    rollupButton.addEventListener(`click`, () => {
+      replaceEventToEdit();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
 
     const editEventComponent = new EditEventComponent(element);
     const editEvent = editEventComponent.getElement().querySelector(`.event__rollup-btn`);
-    editEvent.addEventListener(`click`, onEditFormSubmit);
+    editEvent.addEventListener(`keydown`, () => {
+      replaceEditToEvent();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
 
     render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
   });
