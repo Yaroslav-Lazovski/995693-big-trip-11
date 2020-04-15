@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const generateOfferList = (offer) => {
   return offer
     .map((it) => {
@@ -12,7 +14,7 @@ const generateOfferList = (offer) => {
     }).slice(0, 3).join(`\n`);
 };
 
-export const createEventTemplate = (event) => {
+const createEventTemplate = (event) => {
   const {type, city, price, offer} = event;
 
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === type) ? `in` : `to`;
@@ -50,3 +52,26 @@ export const createEventTemplate = (event) => {
     </li>`
   );
 };
+
+export default class Event {
+  constructor(event) {
+    this._event = event;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

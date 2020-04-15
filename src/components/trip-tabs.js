@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createTabMarkup = (tab, isActive) => {
   const {name} = tab;
 
@@ -6,7 +8,7 @@ const createTabMarkup = (tab, isActive) => {
   );
 };
 
-export const createTripTabsTemplate = (tabs) => {
+const createTripTabsTemplate = (tabs) => {
   const tabsMarkup = tabs.map((it, i) => createTabMarkup(it, i === 0)).join(`\n`);
 
   return (
@@ -15,3 +17,26 @@ export const createTripTabsTemplate = (tabs) => {
     </nav>`
   );
 };
+
+export default class TripTabs {
+  constructor(tabs) {
+    this._tabs = tabs;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripTabsTemplate(this._tabs);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
