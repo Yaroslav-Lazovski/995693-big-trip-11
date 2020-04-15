@@ -8,6 +8,7 @@ import EventComponent from "./components/event.js";
 import EditEventComponent from "./components/edit-event.js";
 import DayListComponent from "./components/day-list.js";
 import DayInfoComponent from "./components/day-info.js";
+import NoEventsComponent from "./components/no-events.js";
 import {generateEvents} from "./mock/events.js";
 import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
 import {render, RenderPosition} from "./utils";
@@ -52,7 +53,6 @@ const countTripPrice = () => {
   }, 0);
 };
 
-
 const infoElement = document.querySelector(`.trip-main`);
 const controlsElement = document.querySelector(`.trip-controls`).querySelectorAll(`h2`);
 const tripEventsElement = document.querySelector(`.trip-events`);
@@ -70,6 +70,10 @@ render(tripInfo, new TripCostComponent(countTripPrice()).getElement(), RenderPos
 render(tripEventsElement, new DayListComponent().getElement(), RenderPosition.BEFOREEND);
 
 const dayList = tripEventsElement.querySelector(`.trip-days`);
+
+if (events.length === 0) {
+  render(dayList, new NoEventsComponent().getElement(), RenderPosition.BEFOREEND);
+}
 
 dates.forEach((item, index) => {
   const tripDay = new DayInfoComponent(index, item);
