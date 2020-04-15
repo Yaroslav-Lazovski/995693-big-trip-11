@@ -1,8 +1,6 @@
-import {createEventTemplate} from "./event";
+import {createElement} from "../utils.js";
 
-const createDayInfoTemplate = (index, day, events) => {
-  const eventsList = events.map((item) => createEventTemplate(item)).join(`\n`);
-
+const createDayInfoTemplate = (index, day) => {
   const year = new Date(day).getFullYear();
 
   const getMonth = () => {
@@ -22,28 +20,26 @@ const createDayInfoTemplate = (index, day, events) => {
         <time class="day__date" datetime="${year}-${getMonth()}-${date}">${new Date(day).toLocaleString(`default`, {month: `long`})} ${new Date(day).getDate()}</time>
       </div>
       <ul class="trip-events__list">
-        ${eventsList}
       </ul>
     </li>`
   );
 };
 
 export default class DayInfo {
-  constructor(index, day, events) {
+  constructor(index, day) {
     this._index = index;
     this._day = day;
-    this._events = events;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createDayInfoTemplate(this._index, this._day, this._events);
+    return createDayInfoTemplate(this._index, this._day);
   }
 
   getElement() {
     if (!this._element) {
-      this._element = createDayInfoTemplate(this.getTemplate());
+      this._element = createElement(this.getTemplate());
     }
     return this._element;
   }
