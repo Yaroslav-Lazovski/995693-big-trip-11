@@ -108,8 +108,9 @@ dates.forEach((item, index) => {
     });
 
     const editEventComponent = new EditEventComponent(element);
-    const editEvent = editEventComponent.getElement().querySelector(`.event__rollup-btn`);
-    editEvent.addEventListener(`keydown`, () => {
+    const editEvent = editEventComponent.getElement().querySelector(`form`);
+    editEvent.addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
       replaceEditToEvent();
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
