@@ -8,6 +8,7 @@ import EventComponent from "./components/event.js";
 import EditEventComponent from "./components/edit-event.js";
 import DayListComponent from "./components/day-list.js";
 import DayInfoComponent from "./components/day-info.js";
+import NoEventsComponent from "./components/no-events.js";
 import {generateEvents} from "./mock/events.js";
 import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
 import {render, RenderPosition} from "./utils";
@@ -52,7 +53,6 @@ const countTripPrice = () => {
   }, 0);
 };
 
-
 const infoElement = document.querySelector(`.trip-main`);
 const controlsElement = document.querySelector(`.trip-controls`).querySelectorAll(`h2`);
 const tripEventsElement = document.querySelector(`.trip-events`);
@@ -71,6 +71,10 @@ render(tripEventsElement, new DayListComponent().getElement(), RenderPosition.BE
 
 const dayList = tripEventsElement.querySelector(`.trip-days`);
 
+if (events.length === 0) {
+  render(dayList, new NoEventsComponent().getElement(), RenderPosition.BEFOREEND);
+}
+
 dates.forEach((item, index) => {
   const tripDay = new DayInfoComponent(index, item);
   const tripDayElement = tripDay.getElement();
@@ -79,22 +83,37 @@ dates.forEach((item, index) => {
   }).forEach((element) => {
     const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
 
-    const onEditButtonClick = () => {
+    const replaceEventToEdit = () => {
       eventListElement.replaceChild(editEventComponent.getElement(), eventComponent.getElement());
     };
 
-    const onEditFormSubmit = (evt) => {
-      evt.preventDefault();
+    const replaceEditToEvent = () => {
       eventListElement.replaceChild(eventComponent.getElement(), editEventComponent.getElement());
+    };
+
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+      if (isEscKey) {
+        replaceEditToEvent();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
     };
 
     const eventComponent = new EventComponent(element);
     const rollupButton = eventComponent.getElement().querySelector(`.event__rollup-btn`);
-    rollupButton.addEventListener(`click`, onEditButtonClick);
+    rollupButton.addEventListener(`click`, () => {
+      replaceEventToEdit();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
 
     const editEventComponent = new EditEventComponent(element);
-    const editEvent = editEventComponent.getElement().querySelector(`.event__rollup-btn`);
-    editEvent.addEventListener(`click`, onEditFormSubmit);
+    const editEvent = editEventComponent.getElement().querySelector(`form`);
+    editEvent.addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      replaceEditToEvent();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
 
     render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
   });
