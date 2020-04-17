@@ -11,7 +11,7 @@ import DayInfoComponent from "./components/day-info.js";
 import NoEventsComponent from "./components/no-events.js";
 import {generateEvents} from "./mock/events.js";
 import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
-import {render, RenderPosition, replace} from "./utils/render.js";
+import {render, RenderPosition, replace, remove} from "./utils/render.js";
 
 
 const EVENT_COUNT = 20;
@@ -70,8 +70,12 @@ render(tripInfo, new TripCostComponent(countTripPrice()).getElement(), RenderPos
 render(tripEventsElement, new DayListComponent().getElement(), RenderPosition.BEFOREEND);
 
 const dayList = tripEventsElement.querySelector(`.trip-days`);
+const tripSortComponent = new TripSortComponent();
+const addNewEventComponent = new AddNewEventComponent();
 
 if (events.length === 0) {
+  remove(tripSortComponent.getElement());
+  remove(addNewEventComponent.getElement());
   render(dayList, new NoEventsComponent().getElement(), RenderPosition.BEFOREEND);
 }
 

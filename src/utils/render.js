@@ -31,5 +31,9 @@ const replace = (parent, newElement, oldElement) => {
   parent.replaceChild(newElement, oldElement);
 };
 
+const remove = (element) => {
+  element.remove();
+};
 
-export {RenderPosition, createElement, render, replace};
+
+export {RenderPosition, createElement, render, replace, remove};
