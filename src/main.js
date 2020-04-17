@@ -11,7 +11,7 @@ import DayInfoComponent from "./components/day-info.js";
 import NoEventsComponent from "./components/no-events.js";
 import {generateEvents} from "./mock/events.js";
 import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
-import {render, RenderPosition} from "./utils";
+import {render, RenderPosition} from "./utils/render.js";
 
 
 const EVENT_COUNT = 20;
