@@ -82,6 +82,7 @@ if (events.length === 0) {
 dates.forEach((item, index) => {
   const tripDay = new DayInfoComponent(index, item);
   const tripDayElement = tripDay.getElement();
+
   events.filter((event) => {
     return item === new Date(event.startDate).toDateString();
   }).forEach((element) => {
@@ -105,15 +106,16 @@ dates.forEach((item, index) => {
     };
 
     const eventComponent = new EventComponent(element);
-    const rollupButton = eventComponent.getElement().querySelector(`.event__rollup-btn`);
-    rollupButton.addEventListener(`click`, () => {
+
+    eventComponent.setEditButtonClickHandler(() => {
       replaceEventToEdit();
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
+
     const editEventComponent = new EditEventComponent(element);
-    const editEvent = editEventComponent.getElement().querySelector(`form`);
-    editEvent.addEventListener(`submit`, (evt) => {
+
+    editEventComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
       replaceEditToEvent();
       document.removeEventListener(`keydown`, onEscKeyDown);
