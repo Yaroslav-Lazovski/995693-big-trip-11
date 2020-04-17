@@ -11,7 +11,7 @@ import DayInfoComponent from "./components/day-info.js";
 import NoEventsComponent from "./components/no-events.js";
 import {generateEvents} from "./mock/events.js";
 import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
-import {render, RenderPosition} from "./utils/render.js";
+import {render, RenderPosition, replace} from "./utils/render.js";
 
 
 const EVENT_COUNT = 20;
@@ -84,11 +84,11 @@ dates.forEach((item, index) => {
     const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
 
     const replaceEventToEdit = () => {
-      eventListElement.replaceChild(editEventComponent.getElement(), eventComponent.getElement());
+      replace(eventListElement, editEventComponent.getElement(), eventComponent.getElement());
     };
 
     const replaceEditToEvent = () => {
-      eventListElement.replaceChild(eventComponent.getElement(), editEventComponent.getElement());
+      replace(eventListElement, eventComponent.getElement(), editEventComponent.getElement());
     };
 
     const onEscKeyDown = (evt) => {
