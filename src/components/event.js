@@ -1,9 +1,9 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const generateOfferList = (offer) => {
   return offer
-    .map((it) => {
-      const {title, cost} = it;
+    .map((item) => {
+      const {title, cost} = item;
       return (
         `<li class="event__offer">
           <span class="event__offer-title">${title}</span>
@@ -17,7 +17,7 @@ const generateOfferList = (offer) => {
 const createEventTemplate = (event) => {
   const {type, city, price, offer} = event;
 
-  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === type) ? `in` : `to`;
+  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const isArrive = !!offer;
 
   return (
@@ -53,25 +53,18 @@ const createEventTemplate = (event) => {
   );
 };
 
-export default class Event {
+export default class Event extends AbstractComponent {
   constructor(event) {
-    this._event = event;
+    super();
 
-    this._element = null;
+    this._event = event;
   }
 
   getTemplate() {
     return createEventTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
   }
 }

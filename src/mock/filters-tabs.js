@@ -2,9 +2,9 @@ const filterNames = [`Everything`, `Future`, `Past`];
 const tabNames = [`Table`, `Stats`];
 
 const generateArrs = (arr) => {
-  return arr.map((it) => {
+  return arr.map((item) => {
     return {
-      name: it
+      name: item
     };
   });
 };

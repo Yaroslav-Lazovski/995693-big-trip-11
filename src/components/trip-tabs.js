@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createTabMarkup = (tab, isActive) => {
   const {name} = tab;
@@ -9,7 +9,7 @@ const createTabMarkup = (tab, isActive) => {
 };
 
 const createTripTabsTemplate = (tabs) => {
-  const tabsMarkup = tabs.map((it, i) => createTabMarkup(it, i === 0)).join(`\n`);
+  const tabsMarkup = tabs.map((item, i) => createTabMarkup(item, i === 0)).join(`\n`);
 
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
@@ -18,25 +18,14 @@ const createTripTabsTemplate = (tabs) => {
   );
 };
 
-export default class TripTabs {
+export default class TripTabs extends AbstractComponent {
   constructor(tabs) {
-    this._tabs = tabs;
+    super();
 
-    this._element = null;
+    this._tabs = tabs;
   }
 
   getTemplate() {
     return createTripTabsTemplate(this._tabs);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

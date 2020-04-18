@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createTypeOfEventMarkup = (type) => {
   return (
@@ -74,8 +74,8 @@ const createTypeOfEventMarkup = (type) => {
 
 const createOffersMarkup = (offers) => {
   return offers
-    .map((it) => {
-      const {title, cost} = it;
+    .map((item) => {
+      const {title, cost} = item;
       const offerName = title.split(` `);
       return (
         `<div class="event__offer-selector">
@@ -95,7 +95,7 @@ const createEditEventTemplate = (event) => {
   const {type, city, price, offer} = event;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
-  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === type) ? `in` : `to`;
+  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const offersMarkup = createOffersMarkup(offer);
 
   return (
@@ -167,25 +167,18 @@ const createEditEventTemplate = (event) => {
   );
 };
 
-export default class EventEdit {
+export default class EventEdit extends AbstractComponent {
   constructor(event) {
-    this._event = event;
+    super();
 
-    this._element = null;
+    this._event = event;
   }
 
   getTemplate() {
     return createEditEventTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
   }
 }
