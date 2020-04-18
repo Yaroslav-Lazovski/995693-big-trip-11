@@ -129,7 +129,7 @@ export default class TripController {
 
       dayList.innerHTML = ``;
 
-      // рендер sortedEvents
+      render(sortedEvents);// <= псевдокод, что должно должно происходить на этом шаге
     });
   }
 }
