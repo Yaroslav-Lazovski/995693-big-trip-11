@@ -9,7 +9,7 @@ const createTabMarkup = (tab, isActive) => {
 };
 
 const createTripTabsTemplate = (tabs) => {
-  const tabsMarkup = tabs.map((it, i) => createTabMarkup(it, i === 0)).join(`\n`);
+  const tabsMarkup = tabs.map((item, i) => createTabMarkup(item, i === 0)).join(`\n`);
 
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">

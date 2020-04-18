@@ -2,8 +2,8 @@ import AbstractComponent from "./abstract-component.js";
 
 const generateOfferList = (offer) => {
   return offer
-    .map((it) => {
-      const {title, cost} = it;
+    .map((item) => {
+      const {title, cost} = item;
       return (
         `<li class="event__offer">
           <span class="event__offer-title">${title}</span>
@@ -17,7 +17,7 @@ const generateOfferList = (offer) => {
 const createEventTemplate = (event) => {
   const {type, city, price, offer} = event;
 
-  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === type) ? `in` : `to`;
+  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const isArrive = !!offer;
 
   return (

@@ -74,8 +74,8 @@ const createTypeOfEventMarkup = (type) => {
 
 const createOffersMarkup = (offers) => {
   return offers
-    .map((it) => {
-      const {title, cost} = it;
+    .map((item) => {
+      const {title, cost} = item;
       const offerName = title.split(` `);
       return (
         `<div class="event__offer-selector">
@@ -105,11 +105,11 @@ const createPhotosMarkup = (url) => {
 };
 
 
-const createAddNewEventTemplate = (event) => {
+const createNewEventTemplate = (event) => {
   const {type, city, price, offer, description, photo} = event;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
-  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === type) ? `in` : `to`;
+  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const offersMarkup = createOffersMarkup(offer);
   const descriptionOfEvent = createDescriptionMarkup(description);
   const photos = createPhotosMarkup(photo);
@@ -177,7 +177,7 @@ const createAddNewEventTemplate = (event) => {
   );
 };
 
-export default class AddNewEvent extends AbstractComponent {
+export default class NewEvent extends AbstractComponent {
   constructor(event) {
     super();
 
@@ -185,6 +185,6 @@ export default class AddNewEvent extends AbstractComponent {
   }
 
   getTemplate() {
-    return createAddNewEventTemplate(this._event);
+    return createNewEventTemplate(this._event);
   }
 }

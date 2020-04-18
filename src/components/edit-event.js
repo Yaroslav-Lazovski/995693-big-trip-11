@@ -74,8 +74,8 @@ const createTypeOfEventMarkup = (type) => {
 
 const createOffersMarkup = (offers) => {
   return offers
-    .map((it) => {
-      const {title, cost} = it;
+    .map((item) => {
+      const {title, cost} = item;
       const offerName = title.split(` `);
       return (
         `<div class="event__offer-selector">
@@ -95,7 +95,7 @@ const createEditEventTemplate = (event) => {
   const {type, city, price, offer} = event;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
-  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((it) => it === type) ? `in` : `to`;
+  const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const offersMarkup = createOffersMarkup(offer);
 
   return (
