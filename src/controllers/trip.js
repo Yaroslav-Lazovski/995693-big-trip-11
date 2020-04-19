@@ -29,6 +29,62 @@ const getSortedEvents = (events, sortType, from, to) => {
   return sortedEvents.slice(from, to);
 };
 
+const renderTripDay = (container, events, date, index) => {
+  const tripDay = new DayInfoComponent(index + 1, date);
+  const tripDayElement = tripDay.getElement();
+
+  events.forEach((element) => {
+    const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
+
+    const replaceEventToEdit = () => {
+      replace(editEventComponent, eventComponent);
+    };
+
+    const replaceEditToEvent = () => {
+      replace(eventComponent, editEventComponent);
+    };
+
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+      if (isEscKey) {
+        replaceEditToEvent();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
+
+    const eventComponent = new EventComponent(element);
+
+    eventComponent.setEditButtonClickHandler(() => {
+      replaceEventToEdit();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+
+    const editEventComponent = new EditEventComponent(element);
+
+    editEventComponent.setSubmitHandler((evt) => {
+      evt.preventDefault();
+      replaceEditToEvent();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
+
+    render(eventListElement, eventComponent, RenderPosition.BEFOREEND);
+  });
+
+  render(container, tripDay, RenderPosition.BEFOREEND);
+};
+
+const renderEventsList = (container, events, eventsDates) => {
+  eventsDates.forEach((item, index) => {
+    const dayEvents = events.filter((event) => {
+      return item === new Date(event.startDate).toDateString();
+    });
+
+    renderTripDay(container, dayEvents, item, index);
+  });
+};
+
 export default class TripController {
   constructor() {
     this._tripSortComponent = new TripSortComponent();
@@ -58,7 +114,6 @@ export default class TripController {
 
     const tripEventsElement = document.querySelector(`.trip-events`);
     render(tripEventsElement, this._tripSortComponent, RenderPosition.BEFOREEND);
-    render(tripEventsElement, new NewEventComponent(events[0]), RenderPosition.BEFOREEND);
     render(tripEventsElement, this._dayListComponent, RenderPosition.BEFOREEND);
 
     const dayList = tripEventsElement.querySelector(`.trip-days`);
@@ -72,54 +127,7 @@ export default class TripController {
       return;
     }
 
-
-    dates.forEach((item, index) => {
-      const tripDay = new DayInfoComponent(index, item);
-      const tripDayElement = tripDay.getElement();
-
-      events.filter((event) => {
-        return item === new Date(event.startDate).toDateString();
-      }).forEach((element) => {
-        const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
-
-        const replaceEventToEdit = () => {
-          replace(editEventComponent, eventComponent);
-        };
-
-        const replaceEditToEvent = () => {
-          replace(eventComponent, editEventComponent);
-        };
-
-        const onEscKeyDown = (evt) => {
-          const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-          if (isEscKey) {
-            replaceEditToEvent();
-            document.removeEventListener(`keydown`, onEscKeyDown);
-          }
-        };
-
-        const eventComponent = new EventComponent(element);
-
-        eventComponent.setEditButtonClickHandler(() => {
-          replaceEventToEdit();
-          document.addEventListener(`keydown`, onEscKeyDown);
-        });
-
-
-        const editEventComponent = new EditEventComponent(element);
-
-        editEventComponent.setSubmitHandler((evt) => {
-          evt.preventDefault();
-          replaceEditToEvent();
-          document.removeEventListener(`keydown`, onEscKeyDown);
-        });
-
-        render(eventListElement, eventComponent, RenderPosition.BEFOREEND);
-      });
-
-      render(dayList, tripDay, RenderPosition.BEFOREEND);
-    });
+    renderEventsList(dayList, events, dates);
 
 
     this._tripSortComponent.setSortTypeChangeHandler((sortType) => {
@@ -129,7 +137,12 @@ export default class TripController {
 
       dayList.innerHTML = ``;
 
-      render(sortedEvents);// <= псевдокод, что должно должно происходить на этом шаге
+      if (sortType === SortType.EVENT) {
+        renderEventsList(dayList, events, dates);
+      } else {
+        renderTripDay(dayList, sortedEvents);
+      }
+
     });
   }
 }
