@@ -5,8 +5,8 @@ import EditEventComponent from "../components/edit-event.js";
 import DayListComponent from "../components/day-list.js";
 import DayInfoComponent from "../components/day-info.js";
 import NoEventsComponent from "../components/no-events.js";
-import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import TripInfoComponent from "../components/trip-info.js";
+import {render, RenderPosition, replace, remove} from "../utils/render.js";
 
 const SHOWING_EVENTS_COUNT = 20;
 
@@ -29,47 +29,48 @@ const getSortedEvents = (events, sortType, from, to) => {
   return sortedEvents.slice(from, to);
 };
 
+const renderEvent = (eventListElement, element) => {
+  const eventComponent = new EventComponent(element);
+  const editEventComponent = new EditEventComponent(element);
+
+  const replaceEventToEdit = () => {
+    replace(editEventComponent, eventComponent);
+  };
+
+  const replaceEditToEvent = () => {
+    replace(eventComponent, editEventComponent);
+  };
+
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      replaceEditToEvent();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  eventComponent.setEditButtonClickHandler(() => {
+    replaceEventToEdit();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+
+  editEventComponent.setSubmitHandler((evt) => {
+    evt.preventDefault();
+    replaceEditToEvent();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
+  render(eventListElement, eventComponent, RenderPosition.BEFOREEND);
+};
+
 const renderTripDay = (container, events, date, index) => {
   const tripDay = new DayInfoComponent(index + 1, date);
   const tripDayElement = tripDay.getElement();
 
   events.forEach((element) => {
     const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
-
-    const replaceEventToEdit = () => {
-      replace(editEventComponent, eventComponent);
-    };
-
-    const replaceEditToEvent = () => {
-      replace(eventComponent, editEventComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-      if (isEscKey) {
-        replaceEditToEvent();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const eventComponent = new EventComponent(element);
-
-    eventComponent.setEditButtonClickHandler(() => {
-      replaceEventToEdit();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-
-    const editEventComponent = new EditEventComponent(element);
-
-    editEventComponent.setSubmitHandler((evt) => {
-      evt.preventDefault();
-      replaceEditToEvent();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    render(eventListElement, eventComponent, RenderPosition.BEFOREEND);
+    renderEvent(eventListElement, element);
   });
 
   render(container, tripDay, RenderPosition.BEFOREEND);
