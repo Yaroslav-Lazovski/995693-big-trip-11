@@ -92,7 +92,7 @@ const createOffersMarkup = (offers) => {
 
 
 const createEditEventTemplate = (event) => {
-  const {type, city, price, offer} = event;
+  const {type, city, price, offer, isFavorite} = event;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
@@ -140,7 +140,7 @@ const createEditEventTemplate = (event) => {
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">Delete</button>
 
-          <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
+          <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
           <label class="event__favorite-btn" for="event-favorite-1">
             <span class="visually-hidden">Add to favorite</span>
             <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -182,7 +182,7 @@ export default class EventEdit extends AbstractComponent {
     this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
   }
 
-  setFavoritesButtonClickHandler(handler) {
+  setFavoriteButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__favorite-checkbox`)
       .addEventListener(`click`, handler);
   }

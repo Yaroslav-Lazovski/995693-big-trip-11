@@ -72,6 +72,7 @@ const generateEvent = () => {
     photo: photos,
     startDate: Math.min(startDate, endDate),
     endDate: Math.max(startDate, endDate),
+    isFavorite: Math.random() > 0.5
   };
 };
 

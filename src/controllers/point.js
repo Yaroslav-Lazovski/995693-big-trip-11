@@ -3,8 +3,9 @@ import EditEventComponent from "../components/edit-event.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
 
 export default class PointController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
+    this._onDataChange = onDataChange;
 
     this._eventComponent = null;
     this._editEventComponent = null;
@@ -27,8 +28,10 @@ export default class PointController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._editEventComponent.setFavoritesButtonClickHandler(() => {
-
+    this._editEventComponent.setFavoriteButtonClickHandler(() => {
+      this._onDataChange(this, event, Object.assign({}, event, {
+        isFavorite: !event.isFavorite,
+      }));
     });
 
     render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
