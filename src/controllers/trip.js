@@ -34,29 +34,37 @@ const renderEvents = (container, events) => {
     const pointController = new PointController(container);
 
     pointController.render(event);
-
     return pointController;
   });
 };
+
 
 const renderTripDay = (container, events, date, index) => {
   const tripDay = new DayInfoComponent(index + 1, date);
   const tripDayElement = tripDay.getElement();
   const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
 
-  renderEvents(eventListElement, events);
+  const pointController = renderEvents(eventListElement, events);
 
   render(container, tripDay, RenderPosition.BEFOREEND);
+
+  return pointController;
 };
 
 const renderEventsList = (container, events, dates) => {
+  let points = [];
+
   dates.forEach((item, index) => {
     const dayEvents = events.filter((event) => {
       return item === new Date(event.startDate).toDateString();
     });
 
+    points = points.concat(dayEvents);
+
     renderTripDay(container, dayEvents, item, index);
   });
+
+  return points;
 };
 
 export default class TripController {
