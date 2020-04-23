@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 
 const createTypeOfEventMarkup = (type) => {
   return (
@@ -167,11 +167,14 @@ const createEditEventTemplate = (event) => {
   );
 };
 
-export default class EventEdit extends AbstractComponent {
+export default class EventEdit extends AbstractSmartComponent {
   constructor(event) {
     super();
 
     this._event = event;
+    this._submitHandler = null;
+
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -179,11 +182,34 @@ export default class EventEdit extends AbstractComponent {
   }
 
   setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
+    this.getElement().querySelector(`form`)
+      .addEventListener(`submit`, handler);
+
+    this._submitHandler = handler;
   }
 
   setFavoriteButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__favorite-checkbox`)
       .addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this._subscribeOnEvents();
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.event__favorite-checkbox`)
+      .addEventListener(`click`, () => {
+        this.isFavorite = !this.isFavorite;
+
+        this.rerender();
+      });
   }
 }
