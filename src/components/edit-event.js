@@ -1,5 +1,19 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 
+const Type = {
+  TAXI: `taxi`,
+  BUS: `bus`,
+  TRAIN: `train`,
+  SHIP: `ship`,
+  TRANSPORT: `transport`,
+  DRIVE: `drive`,
+  FLIGHT: `flight`,
+  CHECK_IN: `check-in`,
+  SIGHTSEEING: `sightseeing`,
+  RESTAURANT: `restaurant`,
+};
+
+
 const createTypeOfEventMarkup = (type) => {
   return (
     `<div class="event__type-wrapper">
@@ -14,37 +28,37 @@ const createTypeOfEventMarkup = (type) => {
           <legend class="visually-hidden">Transfer</legend>
 
           <div class="event__type-item">
-            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${type.toLowerCase() === Type.TAXI ? `checked` : ``}>
             <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
+            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${type.toLowerCase() === Type.BUS ? `checked` : ``}>
             <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${type.toLowerCase() === Type.TRAIN ? `checked` : ``}>
             <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${type.toLowerCase() === Type.SHIP ? `checked` : ``}>
             <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
+            <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport" ${type.toLowerCase() === Type.TRANSPORT ? `checked` : ``}>
             <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${type.toLowerCase() === Type.DRIVE ? `checked` : ``}>
             <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${type.toLowerCase() === Type.FLIGHT ? `checked` : ``}>
             <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
           </div>
         </fieldset>
@@ -53,17 +67,17 @@ const createTypeOfEventMarkup = (type) => {
           <legend class="visually-hidden">Activity</legend>
 
           <div class="event__type-item">
-            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${type.toLowerCase() === Type.CHECK_IN ? `checked` : ``}>
             <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${type.toLowerCase() === Type.SIGHTSEEING ? `checked` : ``}>
             <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${type.toLowerCase() === Type.RESTAURANT ? `checked` : ``}>
             <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
           </div>
         </fieldset>
@@ -216,6 +230,15 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   _subscribeOnEvents() {
+    const element = this.getElement();
+    const eventTypeButtons = element.querySelectorAll(`.event__type-input`);
 
+    eventTypeButtons.forEach((button) => {
+      button.addEventListener(`click`, (evt) => {
+        const eventTypeIcon = element.querySelector(`.event__type-icon`);
+        evt.target.setAttribute(`checked`, ``);
+        eventTypeIcon.src = `img/icons/${evt.target.value}.png`;
+      });
+    });
   }
 }
