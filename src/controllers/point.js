@@ -14,11 +14,18 @@ export default class PointController {
   }
 
   render(event) {
+    const oldEventComponent = this._eventComponent;
+    const oldEditEventComponent = this._editEventComponent;
     this._eventComponent = new EventComponent(event);
     this._editEventComponent = new EditEventComponent(event);
 
     this._eventComponent.setEditButtonClickHandler(() => {
       this._replaceEventToEdit();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
+    });
+
+    this._editEventComponent.setEditButtonClickHandler(() => {
+      this._replaceEditToEvent();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
@@ -34,7 +41,12 @@ export default class PointController {
       }));
     });
 
-    render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
+    if (oldEditEventComponent && oldEventComponent) {
+      replace(this._eventComponent, oldEventComponent);
+      replace(this._editEventComponent, oldEditEventComponent);
+    } else {
+      render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
+    }
   }
 
 

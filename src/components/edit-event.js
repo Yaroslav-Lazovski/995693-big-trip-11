@@ -173,6 +173,8 @@ export default class EventEdit extends AbstractSmartComponent {
 
     this._event = event;
     this._submitHandler = null;
+    this._favoriteButtonClickHandler = null;
+    this._editButtonClickHandler = null;
 
     this._subscribeOnEvents();
   }
@@ -191,10 +193,21 @@ export default class EventEdit extends AbstractSmartComponent {
   setFavoriteButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__favorite-checkbox`)
       .addEventListener(`click`, handler);
+
+    this._favoriteButtonClickHandler = handler;
+  }
+
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
+
+    this._editButtonClickHandler = handler;
   }
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
+    this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
+    this.setEditButtonClickHandler(this._editButtonClickHandler);
     this._subscribeOnEvents();
   }
 
@@ -203,13 +216,6 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   _subscribeOnEvents() {
-    const element = this.getElement();
 
-    element.querySelector(`.event__favorite-checkbox`)
-      .addEventListener(`click`, () => {
-        this.isFavorite = !this.isFavorite;
-
-        this.rerender();
-      });
   }
 }
