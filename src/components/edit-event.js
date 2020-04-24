@@ -1,5 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {generateOffers, generateCities} from "../mock/events.js";
+import {generateOffers, generateCities, generateDescription} from "../mock/events.js";
 
 const Type = {
   TAXI: `taxi`,
@@ -87,6 +87,12 @@ const createTypeOfEventMarkup = (type) => {
   );
 };
 
+const createDescriptionMarkup = (text) => {
+  return (
+    `<p class="event__destination-description">${text.join(`.`)}</p>`
+  );
+};
+
 const createOffersMarkup = (offers) => {
   return offers
     .map((item) => {
@@ -108,10 +114,11 @@ const createOffersMarkup = (offers) => {
 
 const createEditEventTemplate = (event, options = {}) => {
   const {price, isFavorite} = event;
-  const {type, city, offers} = options;
+  const {type, city, offers, description} = options;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
+  const descriptionOfEvent = createDescriptionMarkup(description);
   const offersMarkup = createOffersMarkup(offers);
 
   return (
@@ -177,6 +184,11 @@ const createEditEventTemplate = (event, options = {}) => {
               ${offersMarkup}
             </div>
           </section>
+
+          <section class="event__section  event__section--destination">
+            <h3 class="event__section-title event__section-title--destination">Destination</h3>
+            ${descriptionOfEvent}
+          </section>
         </section>
       </form>
     </li>`
@@ -191,6 +203,8 @@ export default class EventEdit extends AbstractSmartComponent {
     this._type = event.type;
     this._offers = event.offers;
     this._city = event.city;
+    this._description = event.description;
+
     this._submitHandler = null;
     this._favoriteButtonClickHandler = null;
     this._editButtonClickHandler = null;
@@ -199,7 +213,7 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createEditEventTemplate(this._event, {type: this._type, city: this._city, offers: this._offers});
+    return createEditEventTemplate(this._event, {type: this._type, city: this._city, offers: this._offers, description: this._description});
   }
 
   setSubmitHandler(handler) {
@@ -234,21 +248,30 @@ export default class EventEdit extends AbstractSmartComponent {
     super.rerender();
   }
 
+  reset() {
+    const event = this._event;
+
+    this._type = event.type;
+    this._offers = event.offers;
+    this._city = event.city;
+    this._description = event.description;
+    this.rerender();
+  }
+
   _subscribeOnEvents() {
     const element = this.getElement();
     const eventTypeButtons = element.querySelectorAll(`.event__type-input`);
 
-
     eventTypeButtons.forEach((button) => {
       button.addEventListener(`click`, (evt) => {
         const type = evt.target.value;
+
         this._type = type[0].toUpperCase() + type.slice(1);
         this._offers = generateOffers();
         this._city = generateCities();
+        this._description = generateDescription();
         this.rerender();
       });
     });
-
-
   }
 }

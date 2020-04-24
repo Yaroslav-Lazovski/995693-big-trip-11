@@ -66,6 +66,9 @@ const generateCities = () => {
   return cities[Math.floor(Math.random() * cities.length)];
 };
 
+const generateDescription = () => {
+  return shuffleArr(stringsArr.slice(0, Math.floor(Math.random() * 5 + 1)));
+};
 
 const generateEvent = () => {
   const startDate = getRandomDate();
@@ -76,7 +79,7 @@ const generateEvent = () => {
     city: generateCities(),
     price: Math.floor(Math.random() * 100),
     offers: generateOffers(),
-    description: shuffleArr(stringsArr.slice(0, Math.floor(Math.random() * 5 + 1))),
+    description: generateDescription(),
     photo: photos,
     startDate: Math.min(startDate, endDate),
     endDate: Math.max(startDate, endDate),
@@ -92,4 +95,4 @@ const generateEvents = (count) => {
 };
 
 
-export {generateEvents, generateOffers, generateCities};
+export {generateEvents, generateOffers, generateCities, generateDescription};
