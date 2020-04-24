@@ -1,4 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import {generateOffers, generateCities} from "../mock/events.js";
 
 const Type = {
   TAXI: `taxi`,
@@ -105,12 +106,13 @@ const createOffersMarkup = (offers) => {
 };
 
 
-const createEditEventTemplate = (event) => {
-  const {type, city, price, offer, isFavorite} = event;
+const createEditEventTemplate = (event, options = {}) => {
+  const {price, isFavorite} = event;
+  const {type, city, offers} = options;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
-  const offersMarkup = createOffersMarkup(offer);
+  const offersMarkup = createOffersMarkup(offers);
 
   return (
     `<li class="trip-events__item">
@@ -154,8 +156,8 @@ const createEditEventTemplate = (event) => {
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">Delete</button>
 
-          <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
-          <label class="event__favorite-btn" for="event-favorite-1">
+          <input id="event-favorite-${event.startDate}" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
+          <label label class = "event__favorite-btn" for = "event-favorite-${event.startDate}" >
             <span class="visually-hidden">Add to favorite</span>
             <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
               <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
@@ -186,6 +188,9 @@ export default class EventEdit extends AbstractSmartComponent {
     super();
 
     this._event = event;
+    this._type = event.type;
+    this._offers = event.offers;
+    this._city = event.city;
     this._submitHandler = null;
     this._favoriteButtonClickHandler = null;
     this._editButtonClickHandler = null;
@@ -194,7 +199,7 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createEditEventTemplate(this._event);
+    return createEditEventTemplate(this._event, {type: this._type, city: this._city, offers: this._offers});
   }
 
   setSubmitHandler(handler) {
@@ -233,12 +238,17 @@ export default class EventEdit extends AbstractSmartComponent {
     const element = this.getElement();
     const eventTypeButtons = element.querySelectorAll(`.event__type-input`);
 
+
     eventTypeButtons.forEach((button) => {
       button.addEventListener(`click`, (evt) => {
-        const eventTypeIcon = element.querySelector(`.event__type-icon`);
-        evt.target.setAttribute(`checked`, ``);
-        eventTypeIcon.src = `img/icons/${evt.target.value}.png`;
+        const type = evt.target.value;
+        this._type = type[0].toUpperCase() + type.slice(1);
+        this._offers = generateOffers();
+        this._city = generateCities();
+        this.rerender();
       });
     });
+
+
   }
 }

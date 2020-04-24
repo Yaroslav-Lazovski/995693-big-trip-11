@@ -106,11 +106,11 @@ const createPhotosMarkup = (url) => {
 
 
 const createNewEventTemplate = (event) => {
-  const {type, city, price, offer, description, photo} = event;
+  const {type, city, price, offers, description, photo} = event;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
-  const offersMarkup = createOffersMarkup(offer);
+  const offersMarkup = createOffersMarkup(offers);
   const descriptionOfEvent = createDescriptionMarkup(description);
   const photos = createPhotosMarkup(photo);
 

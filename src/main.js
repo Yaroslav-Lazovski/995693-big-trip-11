@@ -26,7 +26,7 @@ const countTripPrice = () => {
   });
 
   events.forEach((item) => {
-    item.offer.forEach((element) => {
+    item.offers.forEach((element) => {
       offerPrices.push(+element.cost);
     });
   });
