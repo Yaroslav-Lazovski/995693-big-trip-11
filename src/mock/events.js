@@ -49,8 +49,6 @@ const shuffleArr = (array) => {
 };
 
 
-const photos = [`http://picsum.photos/248/152?r=${Math.random()}`];
-
 const getRandomDate = () => {
   const randomDate = new Date().getTime();
   const ramdomInt = Math.floor(Math.random() * 300000000);
@@ -58,6 +56,21 @@ const getRandomDate = () => {
   return Math.random() > 0.5 ? randomDate + ramdomInt : randomDate - ramdomInt;
 };
 
+const generateOffers = () => {
+  return shuffleArr(offers.slice(0, Math.floor(Math.random() * offers.length + 1)));
+};
+
+const generateCities = () => {
+  return cities[Math.floor(Math.random() * cities.length)];
+};
+
+const generateDescription = () => {
+  return shuffleArr(stringsArr.slice(0, Math.floor(Math.random() * 5 + 1)));
+};
+
+const generatePhotos = () => {
+  return [`http://picsum.photos/248/152?r=${Math.random()}`];
+};
 
 const generateEvent = () => {
   const startDate = getRandomDate();
@@ -65,15 +78,17 @@ const generateEvent = () => {
 
   return {
     type: typesOfEvent[Math.floor(Math.random() * typesOfEvent.length)],
-    city: cities[Math.floor(Math.random() * cities.length)],
+    city: generateCities(),
     price: Math.floor(Math.random() * 100),
-    offer: shuffleArr(offers.slice(0, Math.floor(Math.random() * offers.length + 1))),
-    description: shuffleArr(stringsArr.slice(0, Math.floor(Math.random() * 5 + 1))),
-    photo: photos,
+    offers: generateOffers(),
+    description: generateDescription(),
+    photos: generatePhotos(),
     startDate: Math.min(startDate, endDate),
     endDate: Math.max(startDate, endDate),
+    isFavorite: Math.random() > 0.5
   };
 };
+
 
 const generateEvents = (count) => {
   return new Array(count)
@@ -82,4 +97,4 @@ const generateEvents = (count) => {
 };
 
 
-export {generateEvents};
+export {generateEvents, generateOffers, generateCities, generateDescription, generatePhotos};

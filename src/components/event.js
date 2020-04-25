@@ -15,10 +15,10 @@ const generateOfferList = (offer) => {
 };
 
 const createEventTemplate = (event) => {
-  const {type, city, price, offer} = event;
+  const {type, city, price, offers} = event;
 
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
-  const isArrive = !!offer;
+  const isArrive = !!offers;
 
   return (
     `<li class="trip-events__item">
@@ -41,7 +41,7 @@ const createEventTemplate = (event) => {
         ${isArrive ?
       `<h4 class="visually-hidden">Offers:</h4>
             <ul class="event__selected-offers">
-            ${generateOfferList(offer)}
+            ${generateOfferList(offers)}
             </ul>`
       : ``
     }

@@ -106,13 +106,13 @@ const createPhotosMarkup = (url) => {
 
 
 const createNewEventTemplate = (event) => {
-  const {type, city, price, offer, description, photo} = event;
+  const {type, city, price, offers, description, photos} = event;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
-  const offersMarkup = createOffersMarkup(offer);
+  const offersMarkup = createOffersMarkup(offers);
   const descriptionOfEvent = createDescriptionMarkup(description);
-  const photos = createPhotosMarkup(photo);
+  const destinationPhotos = createPhotosMarkup(photos);
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -169,7 +169,7 @@ const createNewEventTemplate = (event) => {
           ${descriptionOfEvent}
 
           <div class="event__photos-container">
-            ${photos}
+            ${destinationPhotos}
           </div>
         </section>
       </section>
