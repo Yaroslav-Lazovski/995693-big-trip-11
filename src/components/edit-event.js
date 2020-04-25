@@ -1,5 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {generateOffers, generateCities, generateDescription} from "../mock/events.js";
+import {generateOffers, generateCities, generateDescription, generatePhotos} from "../mock/events.js";
 
 const Type = {
   TAXI: `taxi`,
@@ -87,11 +87,6 @@ const createTypeOfEventMarkup = (type) => {
   );
 };
 
-const createDescriptionMarkup = (text) => {
-  return (
-    `<p class="event__destination-description">${text.join(`.`)}</p>`
-  );
-};
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -111,15 +106,30 @@ const createOffersMarkup = (offers) => {
     }).join(`\n`);
 };
 
+const createDescriptionMarkup = (text) => {
+  return (
+    `<p class="event__destination-description">${text.join(`.`)}</p>`
+  );
+};
+
+const createPhotosMarkup = (url) => {
+  return (
+    `<div class="event__photos-tape">
+      <img class="event__photo" src="${url}" alt="Event photo">
+    </div>`
+  );
+};
+
 
 const createEditEventTemplate = (event, options = {}) => {
   const {price, isFavorite} = event;
-  const {type, city, offers, description} = options;
+  const {type, city, offers, description, photos} = options;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
-  const descriptionOfEvent = createDescriptionMarkup(description);
   const offersMarkup = createOffersMarkup(offers);
+  const descriptionOfEvent = createDescriptionMarkup(description);
+  const destinationPhotos = createPhotosMarkup(photos);
 
   return (
     `<li class="trip-events__item">
@@ -188,6 +198,10 @@ const createEditEventTemplate = (event, options = {}) => {
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title event__section-title--destination">Destination</h3>
             ${descriptionOfEvent}
+
+            <div class="event__photos-container">
+            ${destinationPhotos}
+          </div>
           </section>
         </section>
       </form>
@@ -204,6 +218,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this._offers = event.offers;
     this._city = event.city;
     this._description = event.description;
+    this._photos = event.photos;
 
     this._submitHandler = null;
     this._favoriteButtonClickHandler = null;
@@ -213,7 +228,15 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createEditEventTemplate(this._event, {type: this._type, city: this._city, offers: this._offers, description: this._description});
+    return createEditEventTemplate(this._event,
+        {
+          type: this._type,
+          city: this._city,
+          offers: this._offers,
+          description: this._description,
+          photos: this._photos
+        }
+    );
   }
 
   setSubmitHandler(handler) {
@@ -255,6 +278,8 @@ export default class EventEdit extends AbstractSmartComponent {
     this._offers = event.offers;
     this._city = event.city;
     this._description = event.description;
+    this._photos = event.photos;
+
     this.rerender();
   }
 
@@ -270,6 +295,8 @@ export default class EventEdit extends AbstractSmartComponent {
         this._offers = generateOffers();
         this._city = generateCities();
         this._description = generateDescription();
+        this._photos = generatePhotos();
+
         this.rerender();
       });
     });

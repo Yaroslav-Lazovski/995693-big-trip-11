@@ -123,7 +123,7 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldData, newData) {
-    const index = this._events.findIndex((it) => it === oldData);
+    const index = this._events.findIndex((item) => item === oldData);
 
     if (index === -1) {
       return;
@@ -135,7 +135,7 @@ export default class TripController {
   }
 
   _onViewChange() {
-    this._showedPointControllers.forEach((it) => it.setDefaultView());
+    this._showedPointControllers.forEach((item) => item.setDefaultView());
   }
 
   _onSortTypeChange(sortType) {
