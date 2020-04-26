@@ -3,6 +3,7 @@ import {generateOffers, generateCities, generateDescription, generatePhotos} fro
 
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import moment from "moment";
 
 const Type = {
   TAXI: `taxi`,
@@ -308,8 +309,12 @@ export default class EventEdit extends AbstractSmartComponent {
       this._flatpickr = flatpickr(dateElement, {
         altInput: true,
         allowInput: true,
-        defaultDate: this._startDate
+        // dateFormat: `DD/MM/YYYY hh:mm`,
+        // defaultDate: this._startDate
+        defaultDate: moment(this._startDate).format(`DD/MM/YYYY hh:mm`)
       });
+      dateElement.value = moment(this._startDate).format(`DD/MM/YYYY hh:mm`);
+      // console.log(moment(this._startDate).format(`DD/MM/YYYY hh:mm`));
     }
 
     if (this._endDate) {
