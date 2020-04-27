@@ -22,12 +22,12 @@ const createEventTemplate = (event) => {
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const isArrive = !!offers;
 
-  const duration = moment(endDate).diff(moment(startDate));
+  const duration = moment.duration(moment(endDate).diff(moment(startDate)));
   const startDatetime = moment(startDate).format(`YYYY-MM-DDThh:mm`);
   const endDatetime = moment(endDate).format(`YYYY-MM-DDThh:mm`);
-  let days = moment.utc(duration).format(`DD`);
-  let hours = moment.utc(duration).format(`HH`);
-  let minutes = moment.utc(duration).format(`mm`);
+  let days = duration.days();
+  let hours = duration.hours();
+  let minutes = duration.minutes();
 
   return (
     `<li class="trip-events__item">
