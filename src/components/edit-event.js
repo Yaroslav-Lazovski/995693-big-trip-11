@@ -1,6 +1,10 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {generateOffers, generateCities, generateDescription, generatePhotos} from "../mock/events.js";
 
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import moment from "moment";
+
 const Type = {
   TAXI: `taxi`,
   BUS: `bus`,
@@ -131,6 +135,7 @@ const createEditEventTemplate = (event, options = {}) => {
   const descriptionOfEvent = createDescriptionMarkup(description);
   const destinationPhotos = createPhotosMarkup(photos);
 
+
   return (
     `<li class="trip-events__item">
       <form class="event  event--edit" action="#" method="post">
@@ -219,10 +224,15 @@ export default class EventEdit extends AbstractSmartComponent {
     this._city = event.city;
     this._description = event.description;
     this._photos = event.photos;
+    this._startDate = event.startDate;
+    this._endDate = event.endDate;
 
     this._submitHandler = null;
     this._favoriteButtonClickHandler = null;
     this._editButtonClickHandler = null;
+
+    this._flatpickr = null;
+    this._applyFlatpickr();
 
     this._subscribeOnEvents();
   }
@@ -234,7 +244,9 @@ export default class EventEdit extends AbstractSmartComponent {
           city: this._city,
           offers: this._offers,
           description: this._description,
-          photos: this._photos
+          photos: this._photos,
+          startDate: this._startDate,
+          endDate: this._endDate
         }
     );
   }
@@ -269,6 +281,8 @@ export default class EventEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+
+    this._applyFlatpickr();
   }
 
   reset() {
@@ -279,8 +293,39 @@ export default class EventEdit extends AbstractSmartComponent {
     this._city = event.city;
     this._description = event.description;
     this._photos = event.photos;
+    this._startDate = event.startDate;
+    this._endDate = event.endDate;
 
     this.rerender();
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._startDate) {
+      const dateElement = this.getElement().querySelector(`input[name="event-start-time"]`);
+      this._flatpickr = flatpickr(dateElement, {
+        allowInput: true,
+        defaultDate: moment(this._startDate).format(`DD/MM/YY hh:mm`),
+        enableTime: true,
+        dateFormat: `d/m/y H:i`
+      });
+      dateElement.value = moment(this._startDate).format(`DD/MM/YY hh:mm`);
+    }
+
+    if (this._endDate) {
+      const dateElement = this.getElement().querySelector(`input[name="event-end-time"]`);
+      this._flatpickr = flatpickr(dateElement, {
+        allowInput: true,
+        defaultDate: moment(this._endDate).format(`DD/MM/YY hh:mm`),
+        enableTime: true,
+        dateFormat: `d/m/y H:i`
+      });
+      dateElement.value = moment(this._endDate).format(`DD/MM/YY hh:mm`);
+    }
   }
 
   _subscribeOnEvents() {

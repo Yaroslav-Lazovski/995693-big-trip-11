@@ -72,6 +72,7 @@ const generatePhotos = () => {
   return [`http://picsum.photos/248/152?r=${Math.random()}`];
 };
 
+
 const generateEvent = () => {
   const startDate = getRandomDate();
   const endDate = getRandomDate();

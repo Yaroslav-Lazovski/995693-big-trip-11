@@ -1,5 +1,7 @@
 import AbstractComponent from "./abstract-component.js";
 
+import moment from "moment";
+
 const generateOfferList = (offer) => {
   return offer
     .map((item) => {
@@ -15,10 +17,17 @@ const generateOfferList = (offer) => {
 };
 
 const createEventTemplate = (event) => {
-  const {type, city, price, offers} = event;
+  const {type, city, price, offers, startDate, endDate} = event;
 
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const isArrive = !!offers;
+
+  const duration = moment.duration(moment(endDate).diff(moment(startDate)));
+  const startDatetime = moment(startDate).format(`YYYY-MM-DDThh:mm`);
+  const endDatetime = moment(endDate).format(`YYYY-MM-DDThh:mm`);
+  let days = duration.days();
+  let hours = duration.hours();
+  let minutes = duration.minutes();
 
   return (
     `<li class="trip-events__item">
@@ -29,11 +38,11 @@ const createEventTemplate = (event) => {
         <h3 class="event__title">${type} ${isMove} ${city}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+            <time class="event__start-time" datetime="${startDatetime}">${moment(startDatetime).format(`hh:mm`)}</time>
             &mdash;
-            <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+            <time class="event__end-time" datetime="${endDatetime}">${moment(endDatetime).format(`hh:mm`)}</time>
           </p>
-          <p class="event__duration">30M</p>
+          <p class="event__duration">${days ? days + `D` : ``} ${hours ? hours + `H` : ``} ${minutes ? minutes + `M` : ``}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${price}</span>
