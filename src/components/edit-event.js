@@ -135,6 +135,7 @@ const createEditEventTemplate = (event, options = {}) => {
   const descriptionOfEvent = createDescriptionMarkup(description);
   const destinationPhotos = createPhotosMarkup(photos);
 
+
   return (
     `<li class="trip-events__item">
       <form class="event  event--edit" action="#" method="post">
@@ -307,23 +308,23 @@ export default class EventEdit extends AbstractSmartComponent {
     if (this._startDate) {
       const dateElement = this.getElement().querySelector(`input[name="event-start-time"]`);
       this._flatpickr = flatpickr(dateElement, {
-        altInput: true,
         allowInput: true,
-        // dateFormat: `DD/MM/YYYY hh:mm`,
-        // defaultDate: this._startDate
-        defaultDate: moment(this._startDate).format(`DD/MM/YYYY hh:mm`)
+        defaultDate: moment(this._startDate).format(`DD/MM/YY hh:mm`),
+        enableTime: true,
+        dateFormat: `d/m/y H:i`
       });
-      dateElement.value = moment(this._startDate).format(`DD/MM/YYYY hh:mm`);
-      // console.log(moment(this._startDate).format(`DD/MM/YYYY hh:mm`));
+      dateElement.value = moment(this._startDate).format(`DD/MM/YY hh:mm`);
     }
 
     if (this._endDate) {
       const dateElement = this.getElement().querySelector(`input[name="event-end-time"]`);
       this._flatpickr = flatpickr(dateElement, {
-        altInput: true,
         allowInput: true,
-        defaultDate: this._endDate
+        defaultDate: moment(this._endDate).format(`DD/MM/YY hh:mm`),
+        enableTime: true,
+        dateFormat: `d/m/y H:i`
       });
+      dateElement.value = moment(this._endDate).format(`DD/MM/YY hh:mm`);
     }
   }
 

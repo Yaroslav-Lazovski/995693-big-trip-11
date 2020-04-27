@@ -1,10 +1,13 @@
 import AbstractComponent from "./abstract-component.js";
 
+import moment from "moment";
+
 const createDayInfoTemplate = (index, day) => {
+  const timestamp = new Date(day).getTime();
   const dayCounter = index || ``;
-  const fullDate = day && new Date(day).toLocaleDateString() || ``;
-  const month = day && new Date(day).toLocaleString(`default`, {month: `long`}) || ``;
-  const date = day && new Date(day).getDate() || ``;
+  const fullDate = moment(timestamp).format(`YYYY-MM-DDThh:mm`) || ``;
+  const month = moment(timestamp).format(`MMMM`) || ``;
+  const date = moment(timestamp).format(`DD`) || `` || ``;
 
 
   return (
