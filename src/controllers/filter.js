@@ -1,12 +1,7 @@
 import TripFiltersComponent from "../components/trip-filters.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
 import {getEventsByFilter} from "../utils/filter.js";
-
-const FilterType = {
-  EVERYTHING: `everything`,
-  FUTURE: `future`,
-  PAST: `past`
-};
+import {FilterType} from "../const.js";
 
 
 export default class FilterController {
@@ -25,7 +20,7 @@ export default class FilterController {
 
   render() {
     const container = this._container;
-    const allEvents = this._pointsModel.getTasks();
+    const allEvents = this._pointsModel.getEventsAll();
 
     const filters = Object.values(FilterType).map((filterType) => {
       return {
@@ -43,7 +38,7 @@ export default class FilterController {
     if (oldComponent) {
       replace(this._tripFiltersComponent, oldComponent);
     } else {
-      render(container, this._tripFiltersComponent, RenderPosition.BEFOREEND);
+      render(container, this._tripFiltersComponent, RenderPosition.AFTEREND);
     }
   }
 
