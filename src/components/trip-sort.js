@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 
 export const SortType = {
   EVENT: `event`,
@@ -41,9 +41,11 @@ const createTripSortTemplate = (sortType) => {
   );
 };
 
-export default class TripSort extends AbstractComponent {
+export default class TripSort extends AbstractSmartComponent {
   constructor() {
     super();
+
+    this._handler = null;
 
     this._currenSortType = SortType.EVENT;
   }
@@ -56,7 +58,12 @@ export default class TripSort extends AbstractComponent {
 
   }
 
+  recoveryListeners() {
+    this.setSortTypeChangeHandler(this._handler);
+  }
+
   setSortTypeChangeHandler(handler) {
+    this._handler = handler;
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
@@ -73,6 +80,7 @@ export default class TripSort extends AbstractComponent {
       this._currenSortType = sortType;
 
       handler(this._currenSortType);
+      this.rerender();
     });
   }
 }

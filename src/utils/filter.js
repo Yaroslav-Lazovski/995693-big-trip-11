@@ -1,13 +1,5 @@
 import {FilterType} from "../const.js";
 
-// const compareDates = (firstDate, secondDate) => {
-//   if (firstDate < secondDate) {
-//     return false;
-//   }
-
-//   return true;
-// };
-
 export const getFutureEvents = (events, date) => {
   return events.filter((event) => {
     const eventDate = event.startDate;
@@ -33,7 +25,7 @@ export const getPastEvents = (events, date) => {
 };
 
 export const getEventsByFilter = (events, filterType) => {
-  const nowDate = new Date();
+  const nowDate = new Date().getTime();
 
   switch (filterType) {
     case FilterType.EVERYTHING:

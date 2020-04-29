@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
-const FILTER_ID_PREFIX = `filter__`;
+const FILTER_ID_PREFIX = `filter-`;
 
 const getFilterNameById = (id) => {
   return id.substring(FILTER_ID_PREFIX.length);
@@ -11,7 +11,8 @@ const createFilterMarkup = (filter, isChecked) => {
 
   return (
     `<div class="trip-filters__filter">
-      <input id = "filter-${name}"
+      <input
+        id = "filter-${name}"
         class = "trip-filters__filter-input  visually-hidden"
         type = "radio"
         name = "trip-filter"
