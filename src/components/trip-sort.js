@@ -1,10 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import {SortType} from "../const.js";
 
-export const SortType = {
-  EVENT: `event`,
-  TIME: `time`,
-  PRICE: `price`,
-};
 
 const createTripSortTemplate = (sortType) => {
   return (
@@ -47,11 +43,11 @@ export default class TripSort extends AbstractSmartComponent {
 
     this._handler = null;
 
-    this._currenSortType = SortType.EVENT;
+    this._currentSortType = SortType.EVENT;
   }
 
   getTemplate() {
-    return createTripSortTemplate(this._currenSortType);
+    return createTripSortTemplate(this._currentSortType);
   }
 
   getSortType() {
@@ -73,13 +69,13 @@ export default class TripSort extends AbstractSmartComponent {
 
       const sortType = evt.target.dataset.sortType;
 
-      if (this._currenSortType === sortType) {
+      if (this._currentSortType === sortType) {
         return;
       }
 
-      this._currenSortType = sortType;
+      this._currentSortType = sortType;
 
-      handler(this._currenSortType);
+      handler(this._currentSortType);
       this.rerender();
     });
   }

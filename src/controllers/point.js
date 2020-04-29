@@ -1,11 +1,12 @@
 import EventComponent from "../components/event.js";
 import EditEventComponent from "../components/edit-event.js";
+import {Mode} from "../const.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
-const Mode = {
-  DEFAULT: `default`,
-  EDIT: `edit`,
-};
+// const Mode = {
+//   DEFAULT: `default`,
+//   EDIT: `edit`,
+// };
 
 export default class PointController {
   constructor(container, onDataChange, onViewChange) {
