@@ -22,9 +22,11 @@ export default class PointController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
-  render(event) {
+  render(event, mode) {
     const oldEventComponent = this._eventComponent;
     const oldEditEventComponent = this._editEventComponent;
+
+    this._mode = mode;
     this._eventComponent = new EventComponent(event);
     this._editEventComponent = new EditEventComponent(event);
 
@@ -40,9 +42,12 @@ export default class PointController {
 
     this._editEventComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      this._replaceEditToEvent();
+      const data = this._editEventComponent.getData();
+      this._onDataChange(this, event, data);
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
+
+    this._editEventComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, event, null));
 
     this._editEventComponent.setFavoriteButtonClickHandler(() => {
       this._onDataChange(this, event, Object.assign({}, event, {
@@ -53,6 +58,7 @@ export default class PointController {
     if (oldEditEventComponent && oldEventComponent) {
       replace(this._eventComponent, oldEventComponent);
       replace(this._editEventComponent, oldEditEventComponent);
+      this._replaceEditToEvent();
     } else {
       render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
     }
@@ -80,6 +86,11 @@ export default class PointController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._editEventComponent.reset();
     replace(this._eventComponent, this._editEventComponent);
+
+    if (document.contains(this._editEventComponent.getElement())) {
+      replace(this._eventComponent, this._editEventComponent);
+    }
+
     this._mode = Mode.DEFAULT;
   }
 

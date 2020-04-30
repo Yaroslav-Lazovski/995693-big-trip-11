@@ -40,7 +40,7 @@ const renderEvents = (container, events, onDataChange, onViewChange) => {
   return events.map((event) => {
     const pointController = new PointController(container, onDataChange, onViewChange);
 
-    pointController.render(event);
+    pointController.render(event, PointControllerMode.DEFAULT);
     return pointController;
   });
 };
@@ -168,7 +168,7 @@ export default class TripController {
       this._pointsModel.removeEvent(oldData.id);
       this._updateEvents(this._showingEventsCount);
     } else {
-      const isSuccess = this._pointsModel._updateEvent(oldData.id, newData);
+      const isSuccess = this._pointsModel.updateEvent(oldData.id, newData);
 
       if (isSuccess) {
         pointController.render(newData, PointControllerMode.DEFAULT);

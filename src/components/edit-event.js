@@ -202,6 +202,20 @@ const createEditEventTemplate = (event, options = {}) => {
   );
 };
 
+const parseFormData = (formData) => {
+  return {
+    type: formData.get(`event-type`),
+    city: formData.get(`event-destination`),
+    offers: formData.getAll(`event-offer`),
+    price: formData.get(`event-price`),
+    description: formData.get(`text`),
+    startDate: formData.get(`event-start-time`),
+    endDate: formData.get(`event-end-time`),
+    isFavorite: formData.get(`event-favorite`)
+  };
+};
+
+
 export default class EventEdit extends AbstractSmartComponent {
   constructor(event) {
     super();
@@ -218,6 +232,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this._submitHandler = null;
     this._favoriteButtonClickHandler = null;
     this._editButtonClickHandler = null;
+    this._deleteButtonClickHandler = null;
 
     this._flatpickr = null;
     this._applyFlatpickr();
@@ -239,11 +254,25 @@ export default class EventEdit extends AbstractSmartComponent {
     );
   }
 
+  getData() {
+    const form = this.getElement().querySelector(`.event--edit`);
+    const formData = new FormData(form);
+
+    return parseFormData(formData);
+  }
+
   setSubmitHandler(handler) {
     this.getElement().querySelector(`form`)
       .addEventListener(`submit`, handler);
 
     this._submitHandler = handler;
+  }
+
+  setDeleteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, handler);
+
+    this._deleteButtonClickHandler = handler;
   }
 
   setFavoriteButtonClickHandler(handler) {
@@ -260,10 +289,20 @@ export default class EventEdit extends AbstractSmartComponent {
     this._editButtonClickHandler = handler;
   }
 
+  removeElement() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    super.removeElement();
+  }
+
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
     this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
     this.setEditButtonClickHandler(this._editButtonClickHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
     this._subscribeOnEvents();
   }
 
