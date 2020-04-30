@@ -10,11 +10,6 @@ export const SortType = {
   PRICE: `price`,
 };
 
-export const Mode = {
-  DEFAULT: `default`,
-  EDIT: `edit`,
-};
-
 export const EventType = {
   TAXI: `taxi`,
   BUS: `bus`,
