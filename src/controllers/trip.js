@@ -172,8 +172,8 @@ export default class TripController {
         this._pointsModel.addEvent(newData);
         pointController.render(newData, PointControllerMode.DEFAULT);
 
-        this._showedTaskControllers = [].concat(pointController, this._showedPointControllers);
-        this._showingTasksCount = this._showedTaskControllers.length;
+        this._showedPointControllers = [].concat(pointController, this._showedPointControllers);
+        this._showingEventsCount = this._showedPointControllers.length;
       }
     } else if (newData === null) {
       this._pointsModel.removeEvent(oldData.id);
