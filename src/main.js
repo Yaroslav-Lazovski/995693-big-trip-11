@@ -40,7 +40,9 @@ const countTripPrice = () => {
 
 
 const controlsElement = document.querySelector(`.trip-controls`).querySelectorAll(`h2`);
-render(controlsElement[0], new TripTabsComponent(tabs), RenderPosition.AFTEREND);
+
+const tripTabsComponent = new TripTabsComponent(tabs);
+render(controlsElement[0], tripTabsComponent, RenderPosition.AFTEREND);
 
 const filterController = new FilterController(controlsElement[1], pointsModel);
 filterController.render();
@@ -52,3 +54,4 @@ tripController.render(events);
 
 const tripInfoElement = document.querySelector(`.trip-info`);
 render(tripInfoElement, new TripCostComponent(countTripPrice()), RenderPosition.BEFOREEND);
+

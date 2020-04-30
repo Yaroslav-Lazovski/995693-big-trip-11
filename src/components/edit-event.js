@@ -206,7 +206,7 @@ const parseFormData = (formData) => {
   return {
     type: formData.get(`event-type`),
     city: formData.get(`event-destination`),
-    offers: formData.getAll(`event-offer`),
+    // offers: formData.getAll(`event-offer`),
     price: formData.get(`event-price`),
     description: formData.get(`text`),
     startDate: formData.get(`event-start-time`),

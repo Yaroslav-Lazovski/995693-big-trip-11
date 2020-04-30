@@ -3,11 +3,22 @@ import EditEventComponent from "../components/edit-event.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 export const Mode = {
+  ADDING: `adding`,
   DEFAULT: `default`,
   EDIT: `edit`,
 };
 
-export const EmptyEvent = {};
+
+export const EmptyEvent = {
+  type: ``,
+  city: ``,
+  offers: null,
+  price: ``,
+  description: ``,
+  startDate: null,
+  endDate: null,
+  isFavorite: false
+};
 
 export default class PointController {
   constructor(container, onDataChange, onViewChange) {
@@ -55,12 +66,24 @@ export default class PointController {
       }));
     });
 
-    if (oldEditEventComponent && oldEventComponent) {
-      replace(this._eventComponent, oldEventComponent);
-      replace(this._editEventComponent, oldEditEventComponent);
-      this._replaceEditToEvent();
-    } else {
-      render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
+    switch (mode) {
+      case Mode.DEFAULT:
+        if (oldEditEventComponent && oldEventComponent) {
+          replace(this._eventComponent, oldEventComponent);
+          replace(this._editEventComponent, oldEditEventComponent);
+          this._replaceEditToEvent();
+        } else {
+          render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
+        }
+        break;
+      case Mode.ADDING:
+        if (oldEditEventComponent && oldEventComponent) {
+          remove(oldEventComponent);
+          remove(oldEditEventComponent);
+        }
+        document.addEventListener(`keydown`, this._onEscKeyDown);
+        render(this._container, this._editEventComponent, RenderPosition.AFTERBEGIN);
+        break;
     }
   }
 
@@ -98,6 +121,10 @@ export default class PointController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
+      if (this._mode === Mode.ADDING) {
+        this._onDataChange(this, EmptyEvent, null);
+      }
+
       this._replaceEditToEvent();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
