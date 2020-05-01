@@ -215,8 +215,8 @@ const parseFormData = (formData) => {
     city: formData.get(`event-destination`),
     offers,
     price: formData.get(`event-price`),
-    startDate: new Date(formData.get(`event-start-time`)).getTime(),
-    endDate: new Date(formData.get(`event-end-time`)).getTime(),
+    startDate: moment(formData.get(`event-start-time`), `DD/MM/YY HH:mm`).valueOf(),
+    endDate: moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).valueOf(),
     isFavorite: formData.get(`event-favorite`)
   };
 };
@@ -318,6 +318,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
     this.setEditButtonClickHandler(this._editButtonClickHandler);
     this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
+    this.setPriceInputKeydownHandler(this._setPriceInputKeydownHandler);
     this._subscribeOnEvents();
   }
 

@@ -16,7 +16,7 @@ const getSortedEvents = (events, sortType, from, to) => {
 
   switch (sortType) {
     case SortType.TIME:
-      sortedEvents = showingEvents.sort((a, b) => b.time - a.time);
+      sortedEvents = showingEvents.sort((a, b) => b.endDate - b.startDate - (a.endDate - a.startDate));
       break;
     case SortType.PRICE:
       sortedEvents = showingEvents.sort((a, b) => b.price - a.price);
@@ -36,9 +36,9 @@ const generateDays = (events) => {
 };
 
 
-const renderEvents = (container, events, onDataChange, onViewChange) => {
+const renderEvents = (container, events, onDataChange, onViewChange, onFavoriteClick) => {
   return events.map((event) => {
-    const pointController = new PointController(container, onDataChange, onViewChange);
+    const pointController = new PointController(container, onDataChange, onViewChange, onFavoriteClick);
 
     pointController.render(event, PointControllerMode.DEFAULT);
     return pointController;
@@ -46,19 +46,19 @@ const renderEvents = (container, events, onDataChange, onViewChange) => {
 };
 
 
-const renderTripDay = (container, events, onViewChange, onDataChange, date, index) => {
+const renderTripDay = (container, events, onViewChange, onDataChange, onFavoriteClick, date, index) => {
   const tripDay = date ? new DayInfoComponent(index + 1, date) : new DayInfoComponent();
   const tripDayElement = tripDay.getElement();
   const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
 
-  const pointController = renderEvents(eventListElement, events, onDataChange, onViewChange);
+  const pointController = renderEvents(eventListElement, events, onDataChange, onViewChange, onFavoriteClick);
 
   render(container, tripDay, RenderPosition.BEFOREEND);
 
   return pointController;
 };
 
-const renderEventsList = (container, events, onDataChange, onViewChange) => {
+const renderEventsList = (container, events, onDataChange, onViewChange, onFavoriteClick) => {
   let points = [];
   const dates = generateDays(events);
 
@@ -67,7 +67,7 @@ const renderEventsList = (container, events, onDataChange, onViewChange) => {
       return date === new Date(event.startDate).toDateString();
     });
 
-    points = points.concat(renderTripDay(container, days, onViewChange, onDataChange, date, index));
+    points = points.concat(renderTripDay(container, days, onViewChange, onDataChange, onFavoriteClick, date, index));
   });
 
   return points;
@@ -153,12 +153,12 @@ export default class TripController {
   }
 
   _renderEvents(container, events) {
-    const newPoints = renderEventsList(container, events, this._onDataChange, this._onViewChange);
+    const newPoints = renderEventsList(container, events, this._onDataChange, this._onViewChange, this._onFavoriteClick);
     this._showedPointControllers = this._showedPointControllers.concat(newPoints);
   }
 
   _renderTripDay(container, events) {
-    const newPoints = renderTripDay(container, events, this._onViewChange);
+    const newPoints = renderTripDay(container, events, this._onViewChange, this._onFavoriteClick);
     this._showedPointControllers = newPoints;
   }
 
