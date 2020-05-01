@@ -5,7 +5,7 @@ import {offers as mockOffersArray, generateOffers, generateCities, generateDescr
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import moment from "moment";
-import {encode} from "he";
+// import {encode} from "he";
 
 
 const createTypeOfEventMarkup = (type) => {
@@ -265,7 +265,7 @@ export default class EventEdit extends AbstractSmartComponent {
     const form = this.getElement().querySelector(`.event--edit`);
     const formData = new FormData(form);
     const formDataAll = Object.assign({}, parseFormData(formData), {photos: this._photos, description: this._description});
-    console.log(formDataAll);
+
     return formDataAll;
   }
 
