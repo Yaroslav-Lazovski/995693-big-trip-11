@@ -1,10 +1,11 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {EventType} from "../const.js";
-import {generateOffers, generateCities, generateDescription, generatePhotos} from "../mock/events.js";
+import {offers as mockOffersArray, generateOffers, generateCities, generateDescription, generatePhotos} from "../mock/events.js";
 
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import moment from "moment";
+import {encode} from "he";
 
 
 const createTypeOfEventMarkup = (type) => {
@@ -87,7 +88,7 @@ const createOffersMarkup = (offers) => {
       const offerName = title.split(` `);
       return (
         `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerName[offerName.length - 1]}-1" type="checkbox" name="event-offer-${offerName[offerName.length - 1]}" checked>
+          <input class="event__offer-checkbox visually-hidden" value ="${title}" id="event-offer-${offerName[offerName.length - 1]}-1" type="checkbox" name="event-offer" checked>
           <label class="event__offer-label" for="event-offer-${offerName[offerName.length - 1]}-1">
             <span class="event__offer-title">${title}</span>
             &plus;
@@ -147,12 +148,12 @@ const createEditEventTemplate = (event, options = {}) => {
             <label class="visually-hidden" for="event-start-time-1">
               From
             </label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 12:25">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${event.startDate}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">
               To
             </label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 13:35">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${event.endDate}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -203,14 +204,19 @@ const createEditEventTemplate = (event, options = {}) => {
 };
 
 const parseFormData = (formData) => {
+  const offers = mockOffersArray.filter((offer) => {
+    return formData.getAll(`event-offer`).some((offerTitle) => {
+      return offerTitle === offer.title;
+    });
+  });
+
   return {
     type: formData.get(`event-type`),
     city: formData.get(`event-destination`),
-    // offers: formData.getAll(`event-offer`),
+    offers,
     price: formData.get(`event-price`),
-    description: formData.get(`text`),
-    startDate: formData.get(`event-start-time`),
-    endDate: formData.get(`event-end-time`),
+    startDate: new Date(formData.get(`event-start-time`)).getTime(),
+    endDate: new Date(formData.get(`event-end-time`)).getTime(),
     isFavorite: formData.get(`event-favorite`)
   };
 };
@@ -233,6 +239,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this._favoriteButtonClickHandler = null;
     this._editButtonClickHandler = null;
     this._deleteButtonClickHandler = null;
+    this._priceInputKeydownHandler = null;
 
     this._flatpickr = null;
     this._applyFlatpickr();
@@ -257,8 +264,9 @@ export default class EventEdit extends AbstractSmartComponent {
   getData() {
     const form = this.getElement().querySelector(`.event--edit`);
     const formData = new FormData(form);
-
-    return parseFormData(formData);
+    const formDataAll = Object.assign({}, parseFormData(formData), {photos: this._photos, description: this._description});
+    console.log(formDataAll);
+    return formDataAll;
   }
 
   setSubmitHandler(handler) {
@@ -287,6 +295,13 @@ export default class EventEdit extends AbstractSmartComponent {
       .addEventListener(`click`, handler);
 
     this._editButtonClickHandler = handler;
+  }
+
+  setPriceInputKeydownHandler(handler) {
+    this.getElement().querySelector(`.event__input--price`)
+      .addEventListener(`keydown`, handler);
+
+    this._priceInputKeydownHandler = handler;
   }
 
   removeElement() {

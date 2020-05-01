@@ -90,6 +90,7 @@ export default class TripController {
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
+    this._onFavoriteClick = this._onFavoriteClick.bind(this);
 
     this._tripSortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._pointsModel.setFilterChangeHandler(this._onFilterChange);
@@ -130,13 +131,17 @@ export default class TripController {
     this._renderEvents(dayListElement, events.slice(0, this._showingEventsCount));
   }
 
+  _onFavoriteClick(oldData, newData) {
+    this._pointsModel.updateEvent(oldData.id, newData);
+  }
+
   createEvent() {
     if (this._creatingEvent) {
       return;
     }
 
     const dayListElement = this._container.querySelector(`.trip-days`);
-    this._creatingEvent = new PointController(dayListElement, this._onDataChange, this._onViewChange);
+    this._creatingEvent = new PointController(dayListElement, this._onDataChange, this._onViewChange, this._onFavoriteClick);
     this._creatingEvent.render(EmptyEvent, PointControllerMode.ADDING);
   }
 

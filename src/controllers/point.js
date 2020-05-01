@@ -21,7 +21,7 @@ export const EmptyEvent = {
 };
 
 export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, onFavoriteClick) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
@@ -29,6 +29,7 @@ export default class PointController {
 
     this._eventComponent = null;
     this._editEventComponent = null;
+    this._onFavoriteClick = onFavoriteClick;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
@@ -61,9 +62,21 @@ export default class PointController {
     this._editEventComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, event, null));
 
     this._editEventComponent.setFavoriteButtonClickHandler(() => {
-      this._onDataChange(this, event, Object.assign({}, event, {
+      this._onFavoriteClick(event, Object.assign({}, event, {
         isFavorite: !event.isFavorite,
       }));
+    });
+
+    this._editEventComponent.setPriceInputKeydownHandler((evt) => {
+      if (evt.keyCode === 46 || evt.keyCode === 8 || evt.keyCode === 9 || evt.keyCode === 27 ||
+        (evt.keyCode === 65 && evt.ctrlKey === true) ||
+        (evt.keyCode >= 35 && evt.keyCode <= 39)) {
+        return;
+      } else {
+        if ((evt.keyCode < 48 || evt.keyCode > 57) && (evt.keyCode < 96 || evt.keyCode > 105)) {
+          evt.preventDefault();
+        }
+      }
     });
 
     switch (mode) {

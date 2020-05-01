@@ -55,3 +55,9 @@ tripController.render(events);
 const tripInfoElement = document.querySelector(`.trip-info`);
 render(tripInfoElement, new TripCostComponent(countTripPrice()), RenderPosition.BEFOREEND);
 
+
+const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
+
+newEventButton.addEventListener(`click`, () => {
+  tripController.createEvent();
+});
