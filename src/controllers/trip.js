@@ -46,7 +46,7 @@ const renderEvents = (container, events, onDataChange, onViewChange, onFavoriteC
 };
 
 
-const renderTripDay = (container, events, onViewChange, onDataChange, onFavoriteClick, date, index) => {
+const renderTripDay = (container, events, onDataChange, onViewChange, onFavoriteClick, date, index) => {
   const tripDay = date ? new DayInfoComponent(index + 1, date) : new DayInfoComponent();
   const tripDayElement = tripDay.getElement();
   const eventListElement = tripDayElement.querySelector(`.trip-events__list`);
@@ -67,7 +67,7 @@ const renderEventsList = (container, events, onDataChange, onViewChange, onFavor
       return date === new Date(event.startDate).toDateString();
     });
 
-    points = points.concat(renderTripDay(container, days, onViewChange, onDataChange, onFavoriteClick, date, index));
+    points = points.concat(renderTripDay(container, days, onDataChange, onViewChange, onFavoriteClick, date, index));
   });
 
   return points;
@@ -158,7 +158,7 @@ export default class TripController {
   }
 
   _renderTripDay(container, events) {
-    const newPoints = renderTripDay(container, events, this._onViewChange, this._onFavoriteClick);
+    const newPoints = renderTripDay(container, events, this._onDataChange, this._onViewChange, this._onFavoriteClick);
     this._showedPointControllers = newPoints;
   }
 

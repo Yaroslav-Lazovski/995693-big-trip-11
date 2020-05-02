@@ -1,6 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {EventType} from "../const.js";
-import {offers as mockOffersArray, generateOffers, generateCities, generateDescription, generatePhotos} from "../mock/events.js";
+import {cities, offers as mockOffersArray, generateOffers, generateCities, generateDescription, generatePhotos} from "../mock/events.js";
 
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
@@ -101,7 +101,7 @@ const createOffersMarkup = (offers) => {
 
 const createDescriptionMarkup = (text) => {
   return (
-    `<p class="event__destination-description">${text.join(`.`)}</p>`
+    `<p class="event__destination-description">${text}</p>`
   );
 };
 
@@ -219,6 +219,10 @@ const parseFormData = (formData) => {
     endDate: moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).valueOf(),
     isFavorite: formData.get(`event-favorite`)
   };
+};
+
+const isDestinationInCitiesList = (citiesList, destination) => {
+  return citiesList.some((city) => city === destination);
 };
 
 
@@ -374,6 +378,8 @@ export default class EventEdit extends AbstractSmartComponent {
   _subscribeOnEvents() {
     const element = this.getElement();
     const eventTypeButtons = element.querySelectorAll(`.event__type-input`);
+    const destinationInputs = element.querySelectorAll(`.event__input--destination`);
+    const submitButton = element.querySelector(`.event__save-btn`);
 
     eventTypeButtons.forEach((button) => {
       button.addEventListener(`click`, (evt) => {
@@ -386,6 +392,17 @@ export default class EventEdit extends AbstractSmartComponent {
         this._photos = generatePhotos();
 
         this.rerender();
+      });
+    });
+
+
+    destinationInputs.forEach((input) => {
+      input.addEventListener(`change`, () => {
+        if (!isDestinationInCitiesList(cities, input.value)) {
+          submitButton.disabled = true;
+        } else {
+          submitButton.disabled = false;
+        }
       });
     });
   }

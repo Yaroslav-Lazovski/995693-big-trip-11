@@ -12,11 +12,12 @@ export const Mode = {
 export const EmptyEvent = {
   type: ``,
   city: ``,
-  offers: null,
+  offers: [],
   price: ``,
   description: ``,
-  startDate: null,
-  endDate: null,
+  photos: [],
+  startDate: ``,
+  endDate: ``,
   isFavorite: false
 };
 
@@ -94,8 +95,10 @@ export default class PointController {
           remove(oldEventComponent);
           remove(oldEditEventComponent);
         }
+        const container = document.querySelector(`.trip-events__trip-sort`);
         document.addEventListener(`keydown`, this._onEscKeyDown);
-        render(this._container, this._editEventComponent, RenderPosition.AFTERBEGIN);
+        render(container, this._editEventComponent, RenderPosition.AFTEREND);
+        document.querySelector(`.event--edit`).classList.add(`trip-events__item`);
         break;
     }
   }

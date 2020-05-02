@@ -99,4 +99,4 @@ const generateEvents = (count) => {
 };
 
 
-export {offers, generateEvents, generateOffers, generateCities, generateDescription, generatePhotos};
+export {cities, offers, generateEvents, generateOffers, generateCities, generateDescription, generatePhotos};
