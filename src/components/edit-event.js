@@ -102,14 +102,15 @@ const createOffersMarkup = (offers) => {
 const createDescriptionMarkup = (text, url) => {
   return (
     `<section class="event__section  event__section--destination">
-      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${text}</p>
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${text}</p>
 
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-          <img class="event__photo" src="${url}" alt="Event photo">
-      </div>
-    </section>`
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            <img class="event__photo" src="${url}" alt="Event photo">
+          </div>
+        </div>
+      </section>`
   );
 };
 
@@ -125,8 +126,7 @@ const createEditEventTemplate = (event, options = {}) => {
 
 
   return (
-    `${isNew ? `` : `<li class="trip-events__item">`}
-      <form class="event  event--edit" action="#" method="post">
+    `${isNew ? `` : `<li class="trip-events__item">`}<form class="event  event--edit" action="#" method="post">
         <header class="event__header">
           ${typeOfEventMarkup}
 
@@ -182,17 +182,15 @@ const createEditEventTemplate = (event, options = {}) => {
         <section class="event__details">
           <section class="event__section  event__section--offers">
             <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
             <div class="event__available-offers">
-              ${offersMarkup}
+              ${city ? offersMarkup : ``}
             </div>
           </section>
 
-          <section class="event__section  event__section--destination">
             ${city ? descriptionOfEvent : ``}
+
         </section>
-      </form>
-    ${isNew ? `` : `</li>`}`
+      </form>${isNew ? `` : `</li>`}`
   );
 };
 
@@ -231,6 +229,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this._photos = event.photos;
     this._startDate = event.startDate;
     this._endDate = event.endDate;
+    this._isNew = event.isNew;
 
     this._submitHandler = null;
     this._favoriteButtonClickHandler = null;
@@ -259,7 +258,12 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   getData() {
-    const form = this.getElement().querySelector(`.event--edit`);
+    let form;
+    if (this._isNew) {
+      form = document.querySelector(`.event--edit`);
+    } else {
+      form = this.getElement().querySelector(`.event--edit`);
+    }
     const formData = new FormData(form);
     const formDataAll = Object.assign({}, parseFormData(formData), {photos: this._photos, description: this._description});
 
@@ -267,8 +271,12 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, handler);
+    if (this._isNew) {
+      this.getElement().addEventListener(`submit`, handler);
+    } else {
+      this.getElement().querySelector(`form`)
+        .addEventListener(`submit`, handler);
+    }
 
     this._submitHandler = handler;
   }
