@@ -10,15 +10,16 @@ export const Mode = {
 
 
 export const EmptyEvent = {
-  type: ``,
+  type: `taxi`,
   city: ``,
   offers: [],
-  price: ``,
+  price: 0,
   description: ``,
   photos: [],
-  startDate: ``,
-  endDate: ``,
-  isFavorite: false
+  startDate: Date.now(),
+  endDate: Date.now(),
+  isFavorite: false,
+  isNew: true
 };
 
 export default class PointController {

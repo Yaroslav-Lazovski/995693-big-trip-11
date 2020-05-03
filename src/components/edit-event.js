@@ -99,34 +99,33 @@ const createOffersMarkup = (offers) => {
     }).join(`\n`);
 };
 
-const createDescriptionMarkup = (text) => {
+const createDescriptionMarkup = (text, url) => {
   return (
-    `<p class="event__destination-description">${text}</p>`
-  );
-};
+    `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${text}</p>
 
-const createPhotosMarkup = (url) => {
-  return (
-    `<div class="event__photos-tape">
-      <img class="event__photo" src="${url}" alt="Event photo">
-    </div>`
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          <img class="event__photo" src="${url}" alt="Event photo">
+      </div>
+    </section>`
   );
 };
 
 
 const createEditEventTemplate = (event, options = {}) => {
-  const {price, isFavorite} = event;
+  const {price, isFavorite, isNew} = event;
   const {type, city, offers, description, photos} = options;
 
   const typeOfEventMarkup = createTypeOfEventMarkup(type);
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const offersMarkup = createOffersMarkup(offers);
-  const descriptionOfEvent = createDescriptionMarkup(description);
-  const destinationPhotos = createPhotosMarkup(photos);
+  const descriptionOfEvent = createDescriptionMarkup(description, photos);
 
 
   return (
-    `<li class="trip-events__item">
+    `${isNew ? `` : `<li class="trip-events__item">`}
       <form class="event  event--edit" action="#" method="post">
         <header class="event__header">
           ${typeOfEventMarkup}
@@ -165,7 +164,7 @@ const createEditEventTemplate = (event, options = {}) => {
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__reset-btn" type="reset">${isNew ? `Cancel` : `Delete`}</button>
 
           <input id="event-favorite-${event.startDate}" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
           <label label class = "event__favorite-btn" for = "event-favorite-${event.startDate}" >
@@ -190,16 +189,10 @@ const createEditEventTemplate = (event, options = {}) => {
           </section>
 
           <section class="event__section  event__section--destination">
-            <h3 class="event__section-title event__section-title--destination">Destination</h3>
-            ${descriptionOfEvent}
-
-            <div class="event__photos-container">
-            ${destinationPhotos}
-          </div>
-          </section>
+            ${city ? descriptionOfEvent : ``}
         </section>
       </form>
-    </li>`
+    ${isNew ? `` : `</li>`}`
   );
 };
 
