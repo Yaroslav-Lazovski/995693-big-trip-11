@@ -9,7 +9,7 @@ import {generateTabs} from "./mock/filters-tabs.js";
 import {render, RenderPosition} from "./utils/render.js";
 
 
-const EVENT_COUNT = 20;
+const EVENT_COUNT = 2;
 
 
 const events = generateEvents(EVENT_COUNT);
@@ -60,4 +60,5 @@ const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
 newEventButton.addEventListener(`click`, () => {
   tripController.createEvent();
+  newEventButton.disabled = true;
 });

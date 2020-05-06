@@ -114,6 +114,26 @@ const createDescriptionMarkup = (text, url) => {
   );
 };
 
+const createEditEventButton = () => {
+  return (
+    `<button class="event__rollup-btn" type="button">
+      <span class="visually-hidden">Open event</span>
+    </button>`
+  );
+};
+
+const createEventFavoriteCheckbox = (event, isFavorite) => {
+  return (
+    `<input id="event-favorite-${event.startDate}" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
+    <label label class = "event__favorite-btn" for = "event-favorite-${event.startDate}" >
+      <span class="visually-hidden">Add to favorite</span>
+      <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+        <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+      </svg>
+    </label>`
+  );
+};
+
 
 const createEditEventTemplate = (event, options = {}) => {
   const {price, isFavorite, isNew} = event;
@@ -123,6 +143,8 @@ const createEditEventTemplate = (event, options = {}) => {
   const isMove = [`Check-in`, `Sightseeing`, `Restaurant`].some((item) => item === type) ? `in` : `to`;
   const offersMarkup = createOffersMarkup(offers);
   const descriptionOfEvent = createDescriptionMarkup(description, photos);
+  const editEventButton = createEditEventButton();
+  const eventFavoriteCheckbox = createEventFavoriteCheckbox(event, isFavorite);
 
 
   return (
@@ -165,31 +187,22 @@ const createEditEventTemplate = (event, options = {}) => {
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">${isNew ? `Cancel` : `Delete`}</button>
-
-          <input id="event-favorite-${event.startDate}" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
-          <label label class = "event__favorite-btn" for = "event-favorite-${event.startDate}" >
-            <span class="visually-hidden">Add to favorite</span>
-            <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-              <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
-            </svg>
-          </label>
-
-          <button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>
+          ${isNew ? `` : eventFavoriteCheckbox}
+          ${isNew ? `` : editEventButton}
         </header>
 
-        <section class="event__details">
-          <section class="event__section  event__section--offers">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-            <div class="event__available-offers">
+        ${isNew ? `` : `<section class="event__details">`}
+          ${isNew ? `` : `<section class="event__section  event__section--offers">`}
+            ${isNew ? `` : `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`}
+
+            ${isNew ? `` : `<div class="event__available-offers">`}
               ${city ? offersMarkup : ``}
-            </div>
-          </section>
+            ${isNew ? `` : `</div>`}
 
-            ${city ? descriptionOfEvent : ``}
+          ${isNew ? `` : `</section>`}
 
-        </section>
+          ${city ? descriptionOfEvent : ``}
+        ${isNew ? `` : `</section>`}
       </form>${isNew ? `` : `</li>`}`
   );
 };
@@ -289,15 +302,21 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   setFavoriteButtonClickHandler(handler) {
-    this.getElement().querySelector(`.event__favorite-checkbox`)
-      .addEventListener(`click`, handler);
+    const eventFavoriteButton = this.getElement().querySelector(`.event__favorite-checkbox`);
+
+    if (eventFavoriteButton) {
+      eventFavoriteButton.addEventListener(`click`, handler);
+    }
 
     this._favoriteButtonClickHandler = handler;
   }
 
   setEditButtonClickHandler(handler) {
-    this.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, handler);
+    const editEventButton = this.getElement().querySelector(`.event__rollup-btn`);
+
+    if (editEventButton) {
+      editEventButton.addEventListener(`click`, handler);
+    }
 
     this._editButtonClickHandler = handler;
   }
