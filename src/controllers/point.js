@@ -93,6 +93,8 @@ export default class PointController {
 
     this._editEventComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
+      const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
+      newEventButton.disabled = false;
 
       const data = this._editEventComponent.getData();
       remove(this._editEventComponent);
