@@ -8,6 +8,8 @@ import PointController, {Mode as PointControllerMode, EmptyEvent} from "./point.
 import {SortType} from "../const.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 
+const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
+
 
 const getSortedEvents = (events, sortType) => {
   let sortedEvents = [];
@@ -76,6 +78,7 @@ export default class TripController {
   constructor(container, pointsModel) {
     this._container = container;
     this._pointsModel = pointsModel;
+    this._newEventButton = newEventButton;
 
     this._showedPointControllers = [];
     this._tripSortComponent = new TripSortComponent();
@@ -143,7 +146,10 @@ export default class TripController {
 
     const dayListElement = this._container.querySelector(`.trip-days`);
     this._creatingEvent = new PointController(dayListElement, this._onDataChange, this._onViewChange, this._onFavoriteClick);
+    this._showedPointControllers.push(this._creatingEvent);
     this._creatingEvent.render(EmptyEvent, PointControllerMode.ADDING);
+
+    this._onViewChange();
   }
 
   _removeEvents() {
@@ -171,19 +177,25 @@ export default class TripController {
   _onDataChange(pointController, oldData, newData) {
     if (oldData === EmptyEvent) {
       this._creatingEvent = null;
+
       if (newData === null) {
         pointController.destroy();
+        this._newEventButton.disabled = false;
         this._creatingEvent = null;
+
         this._updateEvents();
       } else {
         this._pointsModel.addEvent(newData);
         this._updateEvents();
+        this._newEventButton.disabled = false;
 
         this._showedPointControllers = [].concat(pointController, this._showedPointControllers);
+        this._onViewChange();
       }
     } else if (newData === null) {
       this._pointsModel.removeEvent(oldData.id);
-      this._updateEvents();
+      this._showedPointControllers.pop();
+      // this._updateEvents();
     } else {
       const isSuccess = this._pointsModel.updateEvent(oldData.id, newData);
 

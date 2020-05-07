@@ -191,18 +191,18 @@ const createEditEventTemplate = (event, options = {}) => {
           ${isNew ? `` : editEventButton}
         </header>
 
-        ${isNew ? `` : `<section class="event__details">`}
-          ${isNew ? `` : `<section class="event__section  event__section--offers">`}
-            ${isNew ? `` : `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`}
+        ${isNew || !city ? `` : `<section class="event__details">
+         <section class="event__section  event__section--offers">
+            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-            ${isNew ? `` : `<div class="event__available-offers">`}
+            <div class="event__available-offers">
               ${city ? offersMarkup : ``}
-            ${isNew ? `` : `</div>`}
+            </div>
 
-          ${isNew ? `` : `</section>`}
+         </section>
 
           ${city ? descriptionOfEvent : ``}
-        ${isNew ? `` : `</section>`}
+        </section>`}
       </form>${isNew ? `` : `</li>`}`
   );
 };

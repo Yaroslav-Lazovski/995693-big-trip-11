@@ -93,8 +93,6 @@ export default class PointController {
 
     this._editEventComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
-      newEventButton.disabled = false;
 
       const data = this._editEventComponent.getData();
       remove(this._editEventComponent);
@@ -123,7 +121,12 @@ export default class PointController {
       }
     });
 
+    if (this._mode === Mode.ADDING) {
+      return;
+    }
+
     replace(this._editEventComponent, this._eventComponent);
+
     this._mode = Mode.EDIT;
   }
 
@@ -137,6 +140,10 @@ export default class PointController {
       replace(this._eventComponent, this._editEventComponent);
     }
 
+    if (this._mode === Mode.ADDING) {
+      this._onDataChange(this, EmptyEvent, null);
+    }
+
     remove(this._editEventComponent);
     this._editEventComponent = null;
 
@@ -145,7 +152,6 @@ export default class PointController {
 
   _onEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-    const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
     if (isEscKey) {
       if (this._mode === Mode.ADDING) {
@@ -158,7 +164,6 @@ export default class PointController {
         this._replaceEditToEvent();
       }
 
-      newEventButton.disabled = false;
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
