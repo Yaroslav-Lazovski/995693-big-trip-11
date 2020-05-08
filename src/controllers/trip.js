@@ -5,7 +5,7 @@ import DayInfoComponent from "../components/day-info.js";
 import NoEventsComponent from "../components/no-events.js";
 import TripInfoComponent from "../components/trip-info.js";
 import PointController, {Mode as PointControllerMode, EmptyEvent} from "./point.js";
-import {SortType} from "../const.js";
+import {SortType, FilterType} from "../const.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
@@ -148,7 +148,9 @@ export default class TripController {
     this._creatingEvent = new PointController(dayListElement, this._onDataChange, this._onViewChange, this._onFavoriteClick);
     this._showedPointControllers.push(this._creatingEvent);
     this._creatingEvent.render(EmptyEvent, PointControllerMode.ADDING);
+    this._pointsModel.setFilter(FilterType.EVERYTHING);
 
+    this._onSortTypeChange(SortType.EVENT);
     this._onViewChange();
   }
 
@@ -182,8 +184,7 @@ export default class TripController {
         pointController.destroy();
         this._newEventButton.disabled = false;
         this._creatingEvent = null;
-
-        this._updateEvents();
+        this._showedPointControllers.pop();
       } else {
         this._pointsModel.addEvent(newData);
         this._updateEvents();
@@ -194,8 +195,7 @@ export default class TripController {
       }
     } else if (newData === null) {
       this._pointsModel.removeEvent(oldData.id);
-      this._showedPointControllers.pop();
-      // this._updateEvents();
+      this._updateEvents();
     } else {
       const isSuccess = this._pointsModel.updateEvent(oldData.id, newData);
 
