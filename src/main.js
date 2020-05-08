@@ -60,5 +60,6 @@ const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
 newEventButton.addEventListener(`click`, () => {
   tripController.createEvent();
+  filterController.render();
   newEventButton.disabled = true;
 });

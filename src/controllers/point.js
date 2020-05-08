@@ -109,15 +109,13 @@ export default class PointController {
       }));
     });
 
-    this._editEventComponent.setPriceInputKeydownHandler((evt) => {
-      if (evt.keyCode === 46 || evt.keyCode === 8 || evt.keyCode === 9 || evt.keyCode === 27 ||
-        (evt.keyCode === 65 && evt.ctrlKey === true) ||
-        (evt.keyCode >= 35 && evt.keyCode <= 39)) {
-        return;
+    this._editEventComponent.setPriceInputKeydownHandler(() => {
+      const priceInput = document.querySelector(`.event__input--price`);
+
+      if ((Number.isNaN(+priceInput.value))) {
+        priceInput.setCustomValidity(`Please, write a number`);
       } else {
-        if ((evt.keyCode < 48 || evt.keyCode > 57) && (evt.keyCode < 96 || evt.keyCode > 105)) {
-          evt.preventDefault();
-        }
+        priceInput.setCustomValidity(``);
       }
     });
 
@@ -158,9 +156,7 @@ export default class PointController {
         this._onDataChange(this, EmptyEvent, null);
       }
 
-      if (this._editEventComponent && this._onDataChange(this, EmptyEvent, null)) {
-        this.destroy();
-      } else {
+      if (this._editEventComponent) {
         this._replaceEditToEvent();
       }
 

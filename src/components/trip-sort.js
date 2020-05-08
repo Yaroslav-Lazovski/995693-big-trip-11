@@ -58,6 +58,11 @@ export default class TripSort extends AbstractSmartComponent {
     this.setSortTypeChangeHandler(this._handler);
   }
 
+  resetSortType() {
+    this._currentSortType = SortType.EVENT;
+    this.rerender();
+  }
+
   setSortTypeChangeHandler(handler) {
     this._handler = handler;
     this.getElement().addEventListener(`click`, (evt) => {

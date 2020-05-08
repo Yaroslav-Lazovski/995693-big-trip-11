@@ -5,7 +5,6 @@ import {cities, offers as mockOffersArray, generateOffers, generateCities, gener
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import moment from "moment";
-// import {encode} from "he";
 
 
 const createTypeOfEventMarkup = (type) => {
@@ -328,6 +327,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this._priceInputKeydownHandler = handler;
   }
 
+
   removeElement() {
     if (this._flatpickr) {
       this._flatpickr.destroy();
@@ -342,7 +342,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
     this.setEditButtonClickHandler(this._editButtonClickHandler);
     this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
-    this.setPriceInputKeydownHandler(this._setPriceInputKeydownHandler);
+    this.setPriceInputKeydownHandler(this._priceInputKeydownHandler);
     this._subscribeOnEvents();
   }
 

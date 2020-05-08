@@ -28,6 +28,10 @@ export default class Points {
     this._callHandlers(this._filterChangeHandlers);
   }
 
+  getFilterType() {
+    return this._activeFilterType;
+  }
+
   removeEvent(id) {
     const index = this._events.findIndex((item) => item.id === id);
 

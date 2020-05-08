@@ -19,6 +19,7 @@ export default class FilterController {
   }
 
   render() {
+    this._activeFilterType = this._pointsModel.getFilterType();
     const container = this._container;
     const allEvents = this._pointsModel.getEventsAll();
 
