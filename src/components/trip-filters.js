@@ -1,11 +1,18 @@
 import AbstractComponent from "./abstract-component.js";
 
+const FILTER_ID_PREFIX = `filter-`;
+
+const getFilterNameById = (id) => {
+  return id.substring(FILTER_ID_PREFIX.length);
+};
+
 const createFilterMarkup = (filter, isChecked) => {
   const {name} = filter;
 
   return (
     `<div class="trip-filters__filter">
-      <input id = "filter-${name}"
+      <input
+        id = "filter-${name}"
         class = "trip-filters__filter-input  visually-hidden"
         type = "radio"
         name = "trip-filter"
@@ -18,7 +25,7 @@ const createFilterMarkup = (filter, isChecked) => {
 };
 
 const createTripFiltersTemplate = (filters) => {
-  const filtersMarkup = filters.map((item, i) => createFilterMarkup(item, i === 0)).join(`\n`);
+  const filtersMarkup = filters.map((item) => createFilterMarkup(item, item.checked)).join(`\n`);
 
   return (
     `<form class="trip-filters" action="#" method="get">
@@ -38,5 +45,12 @@ export default class TripFilters extends AbstractComponent {
 
   getTemplate() {
     return createTripFiltersTemplate(this._filters);
+  }
+
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      const filterName = getFilterNameById(evt.target.id);
+      handler(filterName);
+    });
   }
 }

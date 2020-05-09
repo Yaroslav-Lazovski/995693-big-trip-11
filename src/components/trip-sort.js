@@ -1,10 +1,6 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
+import {SortType} from "../const.js";
 
-export const SortType = {
-  EVENT: `event`,
-  TIME: `time`,
-  PRICE: `price`,
-};
 
 const createTripSortTemplate = (sortType) => {
   return (
@@ -41,22 +37,34 @@ const createTripSortTemplate = (sortType) => {
   );
 };
 
-export default class TripSort extends AbstractComponent {
+export default class TripSort extends AbstractSmartComponent {
   constructor() {
     super();
 
-    this._currenSortType = SortType.EVENT;
+    this._handler = null;
+
+    this._currentSortType = SortType.EVENT;
   }
 
   getTemplate() {
-    return createTripSortTemplate(this._currenSortType);
+    return createTripSortTemplate(this._currentSortType);
   }
 
   getSortType() {
 
   }
 
+  recoveryListeners() {
+    this.setSortTypeChangeHandler(this._handler);
+  }
+
+  resetSortType() {
+    this._currentSortType = SortType.EVENT;
+    this.rerender();
+  }
+
   setSortTypeChangeHandler(handler) {
+    this._handler = handler;
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
@@ -66,13 +74,14 @@ export default class TripSort extends AbstractComponent {
 
       const sortType = evt.target.dataset.sortType;
 
-      if (this._currenSortType === sortType) {
+      if (this._currentSortType === sortType) {
         return;
       }
 
-      this._currenSortType = sortType;
+      this._currentSortType = sortType;
 
-      handler(this._currenSortType);
+      handler(this._currentSortType);
+      this.rerender();
     });
   }
 }

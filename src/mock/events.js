@@ -86,7 +86,8 @@ const generateEvent = () => {
     photos: generatePhotos(),
     startDate: Math.min(startDate, endDate),
     endDate: Math.max(startDate, endDate),
-    isFavorite: Math.random() > 0.5
+    isFavorite: Math.random() > 0.5,
+    id: String(new Date() + Math.random())
   };
 };
 
@@ -98,4 +99,4 @@ const generateEvents = (count) => {
 };
 
 
-export {generateEvents, generateOffers, generateCities, generateDescription, generatePhotos};
+export {cities, offers, generateEvents, generateOffers, generateCities, generateDescription, generatePhotos};

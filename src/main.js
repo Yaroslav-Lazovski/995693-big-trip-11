@@ -1,20 +1,22 @@
 import TripController from "./controllers/trip.js";
 import TripCostComponent from "./components/trip-cost.js";
 import TripTabsComponent from "./components/trip-tabs.js";
-import TripFiltersComponent from "./components/trip-filters.js";
+import FilterController from "./controllers/filter.js";
+import PointsModel from "./models/points.js";
 
 import {generateEvents} from "./mock/events.js";
-import {generateFilters, generateTabs} from "./mock/filters-tabs.js";
+import {generateTabs} from "./mock/filters-tabs.js";
 import {render, RenderPosition} from "./utils/render.js";
 
 
-const EVENT_COUNT = 20;
+const EVENT_COUNT = 2;
 
 
 const events = generateEvents(EVENT_COUNT);
+const pointsModel = new PointsModel();
+pointsModel.setEvents(events);
 
 
-const filters = generateFilters();
 const tabs = generateTabs();
 
 const countTripPrice = () => {
@@ -38,12 +40,26 @@ const countTripPrice = () => {
 
 
 const controlsElement = document.querySelector(`.trip-controls`).querySelectorAll(`h2`);
-render(controlsElement[0], new TripTabsComponent(tabs), RenderPosition.AFTEREND);
-render(controlsElement[1], new TripFiltersComponent(filters), RenderPosition.AFTEREND);
 
+const tripTabsComponent = new TripTabsComponent(tabs);
+render(controlsElement[0], tripTabsComponent, RenderPosition.AFTEREND);
 
-const tripController = new TripController();
+const filterController = new FilterController(controlsElement[1], pointsModel);
+filterController.render();
+
+const tripEventsElement = document.querySelector(`.trip-events`);
+
+const tripController = new TripController(tripEventsElement, pointsModel);
 tripController.render(events);
 
 const tripInfoElement = document.querySelector(`.trip-info`);
 render(tripInfoElement, new TripCostComponent(countTripPrice()), RenderPosition.BEFOREEND);
+
+
+const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
+
+newEventButton.addEventListener(`click`, () => {
+  tripController.createEvent();
+  filterController.render();
+  newEventButton.disabled = true;
+});
