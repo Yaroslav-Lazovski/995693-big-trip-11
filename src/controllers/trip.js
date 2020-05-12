@@ -100,6 +100,14 @@ export default class TripController {
     // this._pointsModel.setDataChangeHandler(this._updateEvents);
   }
 
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   render() {
     const events = this._pointsModel.getEvents();
 
@@ -141,10 +149,6 @@ export default class TripController {
 
   createEvent() {
     const dayListElement = this._container.querySelector(`.trip-days`);
-
-    // if (this._creatingEvent) {
-    //   return;
-    // }
 
     this._pointsModel.setFilter(FilterType.EVERYTHING);
     this._onSortTypeChange(SortType.EVENT);
