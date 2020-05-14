@@ -1,6 +1,7 @@
 import TripController from "./controllers/trip.js";
 import TripCostComponent from "./components/trip-cost.js";
-import TripTabsComponent from "./components/trip-tabs.js";
+import TripTabsComponent, {TabItem} from "./components/trip-tabs.js";
+import TripStatisticsComponent from "./components/trip-statistics.js";
 import FilterController from "./controllers/filter.js";
 import PointsModel from "./models/points.js";
 
@@ -51,6 +52,23 @@ const tripEventsElement = document.querySelector(`.trip-events`);
 
 const tripController = new TripController(tripEventsElement, pointsModel);
 tripController.render(events);
+
+const tripStatisticsComponent = new TripStatisticsComponent(events);
+render(tripEventsElement, tripStatisticsComponent, RenderPosition.AFTEREND);
+// tripStatisticsComponent.hide();
+
+tripTabsComponent.setOnChange((tabItem) => {
+  switch (tabItem) {
+    case TabItem.TABS:
+      tripStatisticsComponent.hide();
+      tripController.show();
+      break;
+    case TabItem.STATS :
+      tripController.hide();
+      tripStatisticsComponent.show();
+      break;
+  }
+});
 
 const tripInfoElement = document.querySelector(`.trip-info`);
 render(tripInfoElement, new TripCostComponent(countTripPrice()), RenderPosition.BEFOREEND);

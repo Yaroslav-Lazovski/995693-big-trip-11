@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
-export const TablItem = {
+export const TabItem = {
   TABS: `control__table`,
   STATS: `control__stats`,
 };
