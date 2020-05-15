@@ -10,7 +10,7 @@ import {generateTabs} from "./mock/filters-tabs.js";
 import {render, RenderPosition} from "./utils/render.js";
 
 
-const EVENT_COUNT = 2;
+const EVENT_COUNT = 12;
 
 
 const events = generateEvents(EVENT_COUNT);
