@@ -5,6 +5,18 @@ import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 // const BAR_HEIGHT = 55;
+const unicodeTypes = {
+  TAXI: `🚕`,
+  DRIVE: `🚗`,
+  BUS: `🚌`,
+  FLIGHT: `✈️`,
+  TRAIN: `🚂`,
+  SHIP: `🚢`,
+  TRANSPORT: `🚊`,
+  RESTAURANT: `🍴`,
+  CHECK_IN: `🏨`,
+  SIGHTSEEING: `🏛️`
+};
 
 
 const renderMoneyChart = (moneyCtx, events) => {
@@ -29,12 +41,20 @@ const renderMoneyChart = (moneyCtx, events) => {
   const types = Object.keys(filteredTypes).sort((a, b) => filteredTypes[b] - filteredTypes[a]);
   const money = Object.values(filteredTypes).sort((a, b) => b - a);
 
+  let titles = [];
+
+  types.forEach((type) => {
+    if (Object.keys(unicodeTypes).includes(type)) {
+      titles.push(unicodeTypes[type.toUpperCase()] + type);
+    }
+  });
+
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: types,
+      labels: titles,
       datasets: [{
         minBarLength: 50,
         barThickness: 44,
@@ -119,11 +139,19 @@ const renderTransportChart = (transportCtx, events) => {
   const types = Object.keys(filteredTypes).sort((a, b) => filteredTypes[b] - filteredTypes[a]);
   const count = Object.values(filteredTypes).sort((a, b) => b - a);
 
+  let titles = [];
+
+  types.forEach((type) => {
+    if (Object.keys(unicodeTypes).includes(type)) {
+      titles.push(unicodeTypes[type.toUpperCase()] + type);
+    }
+  });
+
   return new Chart(transportCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: types,
+      labels: titles,
       datasets: [{
         barThickness: 44,
         minBarLength: 50,
@@ -208,12 +236,20 @@ const renderTimeSpendChart = (timeSpendCtx, events) => {
   const types = Object.keys(filteredTypes).sort((a, b) => filteredTypes[b] - filteredTypes[a]);
   const time = Object.values(filteredTypes).sort((a, b) => b - a);
 
+  let titles = [];
+
+  types.forEach((type) => {
+    if (Object.keys(unicodeTypes).includes(type)) {
+      titles.push(unicodeTypes[type.toUpperCase()] + type);
+    }
+  });
+
 
   return new Chart(timeSpendCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: types,
+      labels: titles,
       datasets: [{
         barThickness: 44,
         minBarLength: 50,
@@ -334,13 +370,10 @@ export default class Statistics extends AbstractSmartComponent {
 
 
     const moneyCtx = element.querySelector(`.statistics__chart--money`);
-    // moneyCtx.height = BAR_HEIGHT * 6;
 
     const transportCtx = element.querySelector(`.statistics__chart--transport`);
-    // transportCtx.height = BAR_HEIGHT * 4;
 
     const timeSpendCtx = element.querySelector(`.statistics__chart--time`);
-    // timeSpendCtx.height = BAR_HEIGHT * 4;
 
 
     this._resetCharts();
@@ -348,6 +381,10 @@ export default class Statistics extends AbstractSmartComponent {
     this._moneyChart = renderMoneyChart(moneyCtx, this._events);
     this._transportChart = renderTransportChart(transportCtx, this._events);
     this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, this._events);
+
+    // moneyCtx.height = BAR_HEIGHT * this._moneyChart.$datalabels._labels.length;
+    // transportCtx.height = BAR_HEIGHT * this._transportChart.$datalabels._labels.length;
+    // timeSpendCtx.height = BAR_HEIGHT * this._timeSpendChart.$datalabels._labels.length;
   }
 
   _resetCharts() {

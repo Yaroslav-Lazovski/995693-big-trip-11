@@ -55,15 +55,17 @@ tripController.render(events);
 
 const tripStatisticsComponent = new TripStatisticsComponent(events);
 render(tripEventsElement, tripStatisticsComponent, RenderPosition.AFTEREND);
-// tripStatisticsComponent.hide();
+tripStatisticsComponent.hide();
 
 tripTabsComponent.setOnChange((tabItem) => {
   switch (tabItem) {
-    case TabItem.TABS:
+    case TabItem.TABLE:
+      tripTabsComponent.setActiveItem(TabItem.TABLE);
       tripStatisticsComponent.hide();
       tripController.show();
       break;
     case TabItem.STATS :
+      tripTabsComponent.setActiveItem(TabItem.STATS);
       tripController.hide();
       tripStatisticsComponent.show();
       break;

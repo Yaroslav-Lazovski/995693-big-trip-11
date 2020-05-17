@@ -9,6 +9,7 @@ import {SortType, FilterType} from "../const.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
+const HIDDEN_CLASS = `visually-hidden`;
 
 
 const getSortedEvents = (events, sortType) => {
@@ -101,11 +102,15 @@ export default class TripController {
   }
 
   hide() {
-    this._container.hide();
+    if (this._container) {
+      this._container.classList.add(HIDDEN_CLASS);
+    }
   }
 
   show() {
-    this._container.show();
+    if (this._container) {
+      this._container.classList.remove(HIDDEN_CLASS);
+    }
   }
 
   render() {
