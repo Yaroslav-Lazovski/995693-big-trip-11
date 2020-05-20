@@ -3,6 +3,7 @@ import TripCostComponent from "./components/trip-cost.js";
 import TripTabsComponent, {TabItem} from "./components/trip-tabs.js";
 import TripStatisticsComponent from "./components/trip-statistics.js";
 import FilterController from "./controllers/filter.js";
+import TripSortComponent from "./components/trip-sort.js";
 import PointsModel from "./models/points.js";
 
 import {generateEvents} from "./mock/events.js";
@@ -56,6 +57,8 @@ tripController.render(events);
 const tripStatisticsComponent = new TripStatisticsComponent(events);
 render(tripEventsElement, tripStatisticsComponent, RenderPosition.AFTEREND);
 tripStatisticsComponent.hide();
+const tripSortComponent = new TripSortComponent();
+
 
 tripTabsComponent.setOnChange((tabItem) => {
   switch (tabItem) {
@@ -68,6 +71,7 @@ tripTabsComponent.setOnChange((tabItem) => {
       tripTabsComponent.setActiveItem(TabItem.STATS);
       tripController.hide();
       tripStatisticsComponent.show();
+      tripSortComponent.resetSortType();
       break;
   }
 });
@@ -79,6 +83,9 @@ render(tripInfoElement, new TripCostComponent(countTripPrice()), RenderPosition.
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
 newEventButton.addEventListener(`click`, () => {
+  tripTabsComponent.setActiveItem(TabItem.TABLE);
+  tripStatisticsComponent.hide();
+  tripController.show();
   tripController.createEvent();
   filterController.render();
   newEventButton.disabled = true;

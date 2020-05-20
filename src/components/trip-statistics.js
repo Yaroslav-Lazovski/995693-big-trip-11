@@ -4,7 +4,7 @@ import moment from "moment";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-// const BAR_HEIGHT = 55;
+const BAR_HEIGHT = 55;
 const unicodeTypes = {
   TAXI: `🚕`,
   DRIVE: `🚗`,
@@ -16,6 +16,10 @@ const unicodeTypes = {
   RESTAURANT: `🍴`,
   CHECK_IN: `🏨`,
   SIGHTSEEING: `🏛️`
+};
+
+const setCanvasHeight = (canvas, barNumber) => {
+  canvas.height = BAR_HEIGHT * (barNumber.length);
 };
 
 
@@ -49,6 +53,7 @@ const renderMoneyChart = (moneyCtx, events) => {
     }
   });
 
+  setCanvasHeight(moneyCtx, titles);
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
@@ -147,6 +152,8 @@ const renderTransportChart = (transportCtx, events) => {
     }
   });
 
+  setCanvasHeight(transportCtx, titles);
+
   return new Chart(transportCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
@@ -244,6 +251,8 @@ const renderTimeSpendChart = (timeSpendCtx, events) => {
     }
   });
 
+  setCanvasHeight(timeSpendCtx, titles);
+
 
   return new Chart(timeSpendCtx, {
     plugins: [ChartDataLabels],
@@ -293,6 +302,7 @@ const renderTimeSpendChart = (timeSpendCtx, events) => {
         xAxes: [{
           ticks: {
             display: false,
+            padding: 5,
             beginAtZero: true,
           },
           gridLines: {
@@ -367,24 +377,22 @@ export default class Statistics extends AbstractSmartComponent {
 
   _renderCharts() {
     const element = this.getElement();
+    const statisticsItems = document.querySelectorAll(`.statistics__item`);
+
+    statisticsItems.forEach((item) => {
+      item.style.paddingLeft = `50px`;
+    });
 
 
     const moneyCtx = element.querySelector(`.statistics__chart--money`);
-
     const transportCtx = element.querySelector(`.statistics__chart--transport`);
-
     const timeSpendCtx = element.querySelector(`.statistics__chart--time`);
-
 
     this._resetCharts();
 
     this._moneyChart = renderMoneyChart(moneyCtx, this._events);
     this._transportChart = renderTransportChart(transportCtx, this._events);
     this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, this._events);
-
-    // moneyCtx.height = BAR_HEIGHT * this._moneyChart.$datalabels._labels.length;
-    // transportCtx.height = BAR_HEIGHT * this._transportChart.$datalabels._labels.length;
-    // timeSpendCtx.height = BAR_HEIGHT * this._timeSpendChart.$datalabels._labels.length;
   }
 
   _resetCharts() {
