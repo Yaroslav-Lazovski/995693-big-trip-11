@@ -36,9 +36,9 @@ const renderMoneyChart = (moneyCtx, events) => {
     let currentType = typesOfEventAll[i];
 
     if (filteredTypes[currentType]) {
-      filteredTypes[currentType] += events[i].price;
+      filteredTypes[currentType] += +events[i].price;
     } else {
-      filteredTypes[currentType] = events[i].price;
+      filteredTypes[currentType] = +events[i].price;
     }
   }
 
@@ -342,10 +342,10 @@ const createStatisticsTemplate = () => {
 };
 
 export default class Statistics extends AbstractSmartComponent {
-  constructor(events) {
+  constructor(pointsModel) {
     super();
 
-    this._events = events;
+    this._pointsModel = pointsModel;
 
     this._moneyChart = null;
     this._transportChart = null;
@@ -362,14 +362,12 @@ export default class Statistics extends AbstractSmartComponent {
   show() {
     super.show();
 
-    this.rerender(this._events);
+    this.rerender(this._pointsModel.getEvents());
   }
 
   recoveryListeners() {}
 
-  rerender(events) {
-    this._events = events;
-
+  rerender() {
     super.rerender();
 
     this._renderCharts();
@@ -390,9 +388,9 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._resetCharts();
 
-    this._moneyChart = renderMoneyChart(moneyCtx, this._events);
-    this._transportChart = renderTransportChart(transportCtx, this._events);
-    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, this._events);
+    this._moneyChart = renderMoneyChart(moneyCtx, this._pointsModel.getEvents());
+    this._transportChart = renderTransportChart(transportCtx, this._pointsModel.getEvents());
+    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, this._pointsModel.getEvents());
   }
 
   _resetCharts() {
