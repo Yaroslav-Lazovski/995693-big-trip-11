@@ -1,15 +1,15 @@
 import AbstractComponent from "./abstract-component.js";
 
-export const TablItem = {
-  TABS: `control__table`,
-  STATS: `control__stats`,
+export const TabItem = {
+  TABLE: `TABLE`,
+  STATS: `STATS`,
 };
 
 const createTabMarkup = (tab, isActive) => {
   const {name} = tab;
 
   return (
-    `<a class="trip-tabs__btn  trip-tabs__btn${isActive ? `--active control__table` : ` control__stats`}" href="#">${name}</a>`
+    `<a class="trip-tabs__btn  ${isActive ? `trip-tabs__btn--active` : ``}" href="#">${name}</a>`
   );
 };
 
@@ -35,11 +35,15 @@ export default class TripTabs extends AbstractComponent {
   }
 
   setActiveItem(tablItem) {
-    const item = this.getElement().querySelector(`.${tablItem}`);
+    const items = this.getElement().querySelectorAll(`.trip-tabs__btn`);
 
-    if (item) {
-      item.checked = true;
-    }
+    items.forEach((item) => {
+      if (item.text.toUpperCase() === tablItem) {
+        item.classList.add(`trip-tabs__btn--active`);
+      } else {
+        item.classList.remove(`trip-tabs__btn--active`);
+      }
+    });
   }
 
   setOnChange(handler) {
@@ -48,7 +52,7 @@ export default class TripTabs extends AbstractComponent {
         return;
       }
 
-      const tablItem = evt.target.id;
+      const tablItem = evt.target.text.toUpperCase();
 
       handler(tablItem);
     });

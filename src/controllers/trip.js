@@ -1,4 +1,5 @@
 import TripSortComponent from "../components/trip-sort.js";
+import TripCostComponent from "../components/trip-cost.js";
 import NewEventComponent from "../components/new-event.js";
 import DayListComponent from "../components/day-list.js";
 import DayInfoComponent from "../components/day-info.js";
@@ -9,6 +10,27 @@ import {SortType, FilterType} from "../const.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
+const HIDDEN_CLASS = `visually-hidden`;
+
+
+const countTripPrice = (events) => {
+  const tripPrices = [];
+  const offerPrices = [];
+
+  events.forEach((item) => {
+    tripPrices.push(+item.price);
+  });
+
+  events.forEach((item) => {
+    item.offers.forEach((element) => {
+      offerPrices.push(+element.cost);
+    });
+  });
+
+  return [...tripPrices, ...offerPrices].reduce((sum, current) => {
+    return sum + current;
+  }, 0);
+};
 
 
 const getSortedEvents = (events, sortType) => {
@@ -85,6 +107,7 @@ export default class TripController {
     this._NewEventComponent = new NewEventComponent();
     this._noEventsComponent = new NoEventsComponent();
     this._dayListComponent = new DayListComponent();
+    this._tripCostComponent = new TripCostComponent();
     this._creatingEvent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
@@ -94,10 +117,23 @@ export default class TripController {
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
     this._removeEvents = this._removeEvents.bind(this);
     this._updateEvents = this._updateEvents.bind(this);
+    this.renderCostComponent = this.renderCostComponent.bind(this);
 
     this._tripSortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._pointsModel.setFilterChangeHandler(this._onFilterChange);
-    // this._pointsModel.setDataChangeHandler(this._updateEvents);
+    this._pointsModel.setDataChangeHandler(this.renderCostComponent);
+  }
+
+  hide() {
+    if (this._container) {
+      this._container.classList.add(HIDDEN_CLASS);
+    }
+  }
+
+  show() {
+    if (this._container) {
+      this._container.classList.remove(HIDDEN_CLASS);
+    }
   }
 
   render() {
@@ -110,7 +146,7 @@ export default class TripController {
       startDate: new Date(this._dates[0]).getDate(),
       endDate: new Date(this._dates[this._dates.length - 1]).getDate(),
       startCity: events[0].city,
-      middleCity: events[events.length / 2 - 1].city,
+      // middleCity: events[events.length / 2 - 1].city,
       endCity: events[events.length - 1].city,
       month: new Date(this._dates[0]).toLocaleString(`default`, {
         month: `long`
@@ -132,7 +168,16 @@ export default class TripController {
       return;
     }
 
+    this.renderCostComponent();
+
     this._renderEvents(dayListElement, events.slice(0, this._showingEventsCount));
+  }
+
+  renderCostComponent() {
+    remove(this._tripCostComponent);
+    this._tripCostComponent = new TripCostComponent(countTripPrice(this._pointsModel.getEvents()));
+    const tripInfoElement = document.querySelector(`.trip-info`);
+    render(tripInfoElement, this._tripCostComponent, RenderPosition.BEFOREEND);
   }
 
   _onFavoriteClick(oldData, newData) {
@@ -142,10 +187,6 @@ export default class TripController {
   createEvent() {
     const dayListElement = this._container.querySelector(`.trip-days`);
 
-    // if (this._creatingEvent) {
-    //   return;
-    // }
-
     this._pointsModel.setFilter(FilterType.EVERYTHING);
     this._onSortTypeChange(SortType.EVENT);
     this._tripSortComponent.resetSortType();
@@ -153,6 +194,11 @@ export default class TripController {
     this._creatingEvent = new PointController(dayListElement, this._onDataChange, this._onViewChange, this._onFavoriteClick);
     this._showedPointControllers.push(this._creatingEvent);
     this._creatingEvent.render(EmptyEvent, PointControllerMode.ADDING);
+  }
+
+  resetSortType() {
+    this._onSortTypeChange(SortType.EVENT);
+    this._tripSortComponent.resetSortType();
   }
 
   _removeEvents() {
