@@ -14,7 +14,7 @@ const unicodeTypes = {
   SHIP: `🚢`,
   TRANSPORT: `🚊`,
   RESTAURANT: `🍴`,
-  CHECK_IN: `🏨`,
+  [`CHECK-IN`]: `🏨`,
   SIGHTSEEING: `🏛️`
 };
 

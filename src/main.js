@@ -1,21 +1,23 @@
+import API from "./api.js";
 import TripController from "./controllers/trip.js";
 import TripTabsComponent, {TabItem} from "./components/trip-tabs.js";
 import TripStatisticsComponent from "./components/trip-statistics.js";
 import FilterController from "./controllers/filter.js";
 import PointsModel from "./models/points.js";
 
-import {generateEvents} from "./mock/events.js";
+// import {generateEvents} from "./mock/events.js";
 import {generateTabs} from "./mock/filters-tabs.js";
 import {render, RenderPosition} from "./utils/render.js";
 import {FilterType} from "./const.js";
 
 
-const EVENT_COUNT = 5;
+// const EVENT_COUNT = 5;
 
 
-const events = generateEvents(EVENT_COUNT);
+// const events = generateEvents(EVENT_COUNT);
+const api = new API();
 const pointsModel = new PointsModel();
-pointsModel.setEvents(events);
+// pointsModel.setEvents(events);
 
 
 const tabs = generateTabs();
@@ -32,7 +34,7 @@ filterController.render();
 const tripEventsElement = document.querySelector(`.trip-events`);
 
 const tripController = new TripController(tripEventsElement, pointsModel);
-tripController.render(events);
+// tripController.render(events);
 
 const tripStatisticsComponent = new TripStatisticsComponent(pointsModel);
 render(tripEventsElement, tripStatisticsComponent, RenderPosition.AFTEREND);
@@ -70,3 +72,9 @@ newEventButton.addEventListener(`click`, () => {
   filterController.render();
   newEventButton.disabled = true;
 });
+
+api.getEvents()
+  .then((events) => {
+    pointsModel.setEvents(events);
+    tripController.render(events);
+  });
