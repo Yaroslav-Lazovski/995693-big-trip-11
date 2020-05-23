@@ -15,7 +15,9 @@ import {FilterType} from "./const.js";
 
 
 // const events = generateEvents(EVENT_COUNT);
-const api = new API();
+const AUTHORIZATION = `Basic er883jdzbdw`;
+
+const api = new API(AUTHORIZATION);
 const pointsModel = new PointsModel();
 // pointsModel.setEvents(events);
 
