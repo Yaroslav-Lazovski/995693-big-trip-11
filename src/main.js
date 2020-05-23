@@ -5,21 +5,14 @@ import TripStatisticsComponent from "./components/trip-statistics.js";
 import FilterController from "./controllers/filter.js";
 import PointsModel from "./models/points.js";
 
-// import {generateEvents} from "./mock/events.js";
 import {generateTabs} from "./mock/filters-tabs.js";
 import {render, RenderPosition} from "./utils/render.js";
 import {FilterType} from "./const.js";
 
 
-// const EVENT_COUNT = 5;
-
-
-// const events = generateEvents(EVENT_COUNT);
 const AUTHORIZATION = `Basic er883jdzbdw`;
-
 const api = new API(AUTHORIZATION);
 const pointsModel = new PointsModel();
-// pointsModel.setEvents(events);
 
 
 const tabs = generateTabs();
@@ -36,7 +29,6 @@ filterController.render();
 const tripEventsElement = document.querySelector(`.trip-events`);
 
 const tripController = new TripController(tripEventsElement, pointsModel);
-// tripController.render(events);
 
 const tripStatisticsComponent = new TripStatisticsComponent(pointsModel);
 render(tripEventsElement, tripStatisticsComponent, RenderPosition.AFTEREND);

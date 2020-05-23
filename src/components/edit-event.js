@@ -98,7 +98,14 @@ const createOffersMarkup = (offers) => {
     }).join(`\n`);
 };
 
-const createDescriptionMarkup = (text, url) => {
+
+const getPhotosList = (photos) => {
+  return photos.map((photo) => {
+    return (`<img class="event__photo" src="${photo.src}" alt="${photo.description}">`);
+  }).join(``);
+};
+
+const createDescriptionMarkup = (text, photos) => {
   return (
     `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -106,7 +113,7 @@ const createDescriptionMarkup = (text, url) => {
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-            <img class="event__photo" src="${url}" alt="Event photo">
+            ${getPhotosList(photos)}
           </div>
         </div>
       </section>`

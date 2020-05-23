@@ -176,8 +176,8 @@ export default class TripController {
   renderCostComponent() {
     remove(this._tripCostComponent);
     this._tripCostComponent = new TripCostComponent(countTripPrice(this._pointsModel.getEvents()));
-    const tripInfoElement = document.querySelector(`.trip-info`);
-    render(tripInfoElement, this._tripCostComponent, RenderPosition.BEFOREEND);
+    // const tripInfoElement = document.querySelector(`.trip-info`);
+    // render(tripInfoElement, this._tripCostComponent, RenderPosition.BEFOREEND);
   }
 
   _onFavoriteClick(oldData, newData) {
