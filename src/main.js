@@ -10,7 +10,7 @@ import {render, RenderPosition} from "./utils/render.js";
 import {FilterType} from "./const.js";
 
 
-const AUTHORIZATION = `Basic er883jdzbdw`;
+const AUTHORIZATION = `Basic kTy9gIdsz2317rD`;
 const api = new API(AUTHORIZATION);
 const pointsModel = new PointsModel();
 
@@ -28,7 +28,7 @@ filterController.render();
 
 const tripEventsElement = document.querySelector(`.trip-events`);
 
-const tripController = new TripController(tripEventsElement, pointsModel);
+const tripController = new TripController(tripEventsElement, pointsModel, api);
 
 const tripStatisticsComponent = new TripStatisticsComponent(pointsModel);
 render(tripEventsElement, tripStatisticsComponent, RenderPosition.AFTEREND);

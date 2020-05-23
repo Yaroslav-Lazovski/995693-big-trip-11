@@ -22,3 +22,5 @@ export const EventType = {
   SIGHTSEEING: `sightseeing`,
   RESTAURANT: `restaurant`,
 };
+
+export const Cities = [`Amsterdam`, `Chamonix`, `Geneva`, `Saint Petersburg`];

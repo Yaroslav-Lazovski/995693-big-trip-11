@@ -1,6 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {EventType} from "../const.js";
-import {cities, offers as mockOffersArray, generateOffers, generateCities, generateDescription, generatePhotos} from "../mock/events.js";
+import {EventType, Cities} from "../const.js";
 
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
@@ -214,16 +213,16 @@ const createEditEventTemplate = (event, options = {}) => {
 };
 
 const parseFormData = (formData) => {
-  const offers = mockOffersArray.filter((offer) => {
-    return formData.getAll(`event-offer`).some((offerTitle) => {
-      return offerTitle === offer.title;
-    });
-  });
+  // const offers = mockOffersArray.filter((offer) => {
+  //   return formData.getAll(`event-offer`).some((offerTitle) => {
+  //     return offerTitle === offer.title;
+  //   });
+  // });
 
   return {
     type: formData.get(`event-type`),
     city: formData.get(`event-destination`),
-    offers,
+    // offers,
     price: formData.get(`event-price`),
     startDate: moment(formData.get(`event-start-time`), `DD/MM/YY HH:mm`).valueOf(),
     endDate: moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).valueOf(),
@@ -413,10 +412,10 @@ export default class EventEdit extends AbstractSmartComponent {
         const type = evt.target.value;
 
         this._type = type[0].toUpperCase() + type.slice(1);
-        this._offers = generateOffers();
-        this._city = generateCities();
-        this._description = generateDescription();
-        this._photos = generatePhotos();
+        this._offers = event.offers;
+        this._city = event.city;
+        this._description = event.description;
+        this._photos = event.photos;
 
         this.rerender();
       });
@@ -425,7 +424,7 @@ export default class EventEdit extends AbstractSmartComponent {
 
     destinationInputs.forEach((input) => {
       input.addEventListener(`change`, () => {
-        if (!isDestinationInCitiesList(cities, input.value)) {
+        if (!isDestinationInCitiesList(Cities, input.value)) {
           submitButton.disabled = true;
         } else {
           submitButton.disabled = false;
