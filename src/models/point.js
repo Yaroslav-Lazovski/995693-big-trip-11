@@ -13,11 +13,32 @@ export default class Point {
     this.DATA = data;
   }
 
+  toRAW() {
+    return {
+      'base_price': this.price,
+      'date_from': this.startDate.toISOString(),
+      'date_to': this.endDate.toISOString(),
+      'destination': {
+        'pictures': this.photos,
+        'description': this.description,
+        'name': this.city,
+      },
+      'id': this.id,
+      'is_favorite': this.isFavorite,
+      'offers': this.offers,
+      'type': this.type
+    };
+  }
+
   static parsePoint(data) {
     return new Point(data);
   }
 
   static parsePoints(data) {
     return data.map(Point.parsePoint);
+  }
+
+  static clone(data) {
+    return new Point(data.toRAW());
   }
 }

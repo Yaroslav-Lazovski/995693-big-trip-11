@@ -1,6 +1,9 @@
 import EventComponent from "../components/event.js";
 import EditEventComponent from "../components/edit-event.js";
+import PointModel from "../models/point.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
+
+import moment from "moment";
 
 export const Mode = {
   ADDING: `adding`,
@@ -20,6 +23,24 @@ export const EmptyEvent = {
   endDate: Date.now(),
   isFavorite: false,
   isNew: true
+};
+
+const parseFormData = (formData) => {
+  // const offers = mockOffersArray.filter((offer) => {
+  //   return formData.getAll(`event-offer`).some((offerTitle) => {
+  //     return offerTitle === offer.title;
+  //   });
+  // });
+
+  return {
+    type: formData.get(`event-type`),
+    city: formData.get(`event-destination`),
+    // offers,
+    price: formData.get(`event-price`),
+    startDate: moment(formData.get(`event-start-time`), `DD/MM/YY HH:mm`).valueOf(),
+    endDate: moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).valueOf(),
+    isFavorite: formData.get(`event-favorite`)
+  };
 };
 
 export default class PointController {
@@ -94,9 +115,12 @@ export default class PointController {
     this._editEventComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
 
-      const data = this._editEventComponent.getData();
       remove(this._editEventComponent);
       this._editEventComponent = null;
+
+      const formData = this._editEventComponent.getData();
+      const data = parseFormData(formData);
+
       this._onDataChange(this, event, data);
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
@@ -104,9 +128,10 @@ export default class PointController {
     this._editEventComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, event, null));
 
     this._editEventComponent.setFavoriteButtonClickHandler(() => {
-      this._onDataChange(this, event, Object.assign({}, event, {
-        isFavorite: !event.isFavorite,
-      }));
+      const newTask = PointModel.clone(event);
+      newTask.isFavorite = !newTask.isFavorite;
+
+      this._onDataChange(this, event, newTask);
     });
 
     this._editEventComponent.setPriceInputKeydownHandler(() => {

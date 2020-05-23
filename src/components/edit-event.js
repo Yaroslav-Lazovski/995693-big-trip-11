@@ -212,23 +212,6 @@ const createEditEventTemplate = (event, options = {}) => {
   );
 };
 
-const parseFormData = (formData) => {
-  // const offers = mockOffersArray.filter((offer) => {
-  //   return formData.getAll(`event-offer`).some((offerTitle) => {
-  //     return offerTitle === offer.title;
-  //   });
-  // });
-
-  return {
-    type: formData.get(`event-type`),
-    city: formData.get(`event-destination`),
-    // offers,
-    price: formData.get(`event-price`),
-    startDate: moment(formData.get(`event-start-time`), `DD/MM/YY HH:mm`).valueOf(),
-    endDate: moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).valueOf(),
-    isFavorite: formData.get(`event-favorite`)
-  };
-};
 
 const isDestinationInCitiesList = (citiesList, destination) => {
   return citiesList.some((city) => city === destination);
@@ -282,10 +265,11 @@ export default class EventEdit extends AbstractSmartComponent {
     } else {
       form = this.getElement().querySelector(`.event--edit`);
     }
-    const formData = new FormData(form);
-    const formDataAll = Object.assign({}, parseFormData(formData), {photos: this._photos, description: this._description});
+    // const formData = new FormData(form);
+    // const formDataAll = Object.assign({}, parseFormData(formData), {photos: this._photos, description: this._description});
 
-    return formDataAll;
+    // return formDataAll;
+    return new FormData(form);
   }
 
   setSubmitHandler(handler) {
